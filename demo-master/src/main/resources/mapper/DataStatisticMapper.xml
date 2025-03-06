@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.DataStatisticMapper">
+    <resultMap type="com.example.demo.model.DataStatistic" id="DataStatisticMap">
+        <result property="statisticId" column="statistic_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="downloadCount" column="download_count" jdbcType="INTEGER"/>
+        <result property="averageRating" column="average_rating" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="logInTime" column="login_time" jdbcType="VARCHAR"/>
+        <result property="logOutTime" column="logout_time" jdbcType="VARCHAR"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="duration" column="duration" jdbcType="VARCHAR"/>
+        <result property="achievementId" column="achievement_Id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 插入登录记录 -->
+    <insert id="userLoginInsert" keyProperty="statistic_id" useGeneratedKeys="true">
+        INSERT INTO statistics_info (user_id, user_name, login_time, table_status, logout_time)
+        VALUES (#{userId}, #{userName}, #{logInTime}, true, #{logOutTime});
+    </insert>
+
+    <!-- 更新登录时间 -->
+    <update id="updateLogOutInfo">
+        UPDATE statistics_info
+        SET logout_time = #{logOutTime},  <!-- 当前时间 -->
+        table_status = false,   <!-- 设置为 false，表示用户登出 -->
+        duration = #{duration}
+        WHERE user_id = #{userId}
+        AND user_name = #{userName}
+        AND table_status = true
+    </update>
+
+    <!-- 统计当前在线用户数 -->
+    <select id="countOnlineUser" resultType="Integer">
+        SELECT COUNT(*) FROM statistics_info
+        WHERE table_status = true;
+    </select>
+
+
+    <!-- 根据用户名获取用户登录时间 -->
+    <select id="getLogInTimeByuser_name" resultType="String">
+        SELECT login_time
+        FROM statistics_info
+        WHERE user_name = #{userName} AND table_status = true
+    </select>
+
+
+    <!-- 计算在线时长 -->
+    <!--    <insert id="onlineUserDuration">-->
+    <!--        INSERT INTO statistics_info (duration)-->
+    <!--        VALUES (#{duration})-->
+    <!--        WHERE user_id = #{userId}-->
+    <!--        AND user_name = #{user_name}-->
+    <!--        AND table_status = true-->
+    <!--    </insert>-->
+
+    <!-- 更新登出时间和在线时长 -->
+    <!--    <update id="updateLogOutInfo">-->
+    <!--        UPDATE statistics_info-->
+    <!--        SET logout_time = NOW(), duuration = #{duration}-->
+    <!--        WHERE user_id = #{userId} AND statistic_id = #{statisticId};-->
+    <!--    </update>-->
+
+    <!-- 获取最新的一条在线记录 -->
+    <!--    <select id="latestOnLineRecord" resultType="Integer">-->
+    <!--        SELECT statistic_id-->
+    <!--        FROM statistics_info-->
+    <!--        WHERE user_id = #{userId} AND logout_time IS NULL-->
+    <!--        ORDER BY login_time DESC-->
+    <!--            LIMIT 1;-->
+    <!--    </select>-->
+
+    <!-- 获取下载次数 -->
+    <!--    <select id="getDownloadCount" resultType="Integer">-->
+    <!--        SELECT download_count-->
+    <!--        FROM statistics_info-->
+    <!--        WHERE userId = #{userId}-->
+    <!--            LIMIT 1;-->
+    <!--    </select>-->
+
+    <!-- 更新下载次数 -->
+    <!--    <update id="updateDownloadCount" parameterType="map">-->
+    <!--        UPDATE statistics_info-->
+    <!--        SET download_count = #{downloadCount}-->
+    <!--        WHERE user_id = #{userId};-->
+    <!--    </update>-->
+</mapper>

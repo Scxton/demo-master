@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.AchievementCheckTemplateMapper">
+
+    <resultMap type="com.example.demo.model.AchievementCheckTemplate" id="AchievementCheckTemplateMap">
+        <result property="templateId" column="template_id" jdbcType="INTEGER"/>
+        <result property="templateType" column="template_type" jdbcType="VARCHAR"/>
+        <result property="templateName" column="template_name" jdbcType="VARCHAR"/>
+        <result property="templateIntro" column="template_intro" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="uploadTime" column="upload_time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="versionNumber" column="version_number" jdbcType="VARCHAR"/>
+        <result property="templateStoragepath" column="template_storagepath" jdbcType="VARCHAR"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="reviewStatus" column="review_status" jdbcType="BOOLEAN"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AchievementCheckTemplateMap">
+        select
+template_id, template_type, template_name, template_intro, remarks, upload_time, user_id, version_number, template_storagepath, table_status, review_status, update_time
+        from achievement_check_template
+        where template_id = #{templateId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="templateId" useGeneratedKeys="true">
+        insert into achievement_check_template(template_type, template_name, template_intro, remarks, upload_time, user_id, version_number, template_storagepath, table_status, review_status, update_time)
+        values (#{templateType}, #{templateName}, #{templateIntro}, #{remarks}, #{uploadTime}, #{userId}, #{versionNumber}, #{templateStoragepath}, #{tableStatus}, #{reviewStatus}, #{updateTime})
+    </insert>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update achievement_check_template
+        <set>
+            <if test="templateType != null and templateType != ''">
+                template_type = #{templateType},
+            </if>
+            <if test="templateName != null and templateName != ''">
+                template_name = #{templateName},
+            </if>
+            <if test="templateIntro != null and templateIntro != ''">
+                template_intro = #{templateIntro},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="uploadTime != null">
+                upload_time = #{uploadTime},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="versionNumber != null and versionNumber != ''">
+                version_number = #{versionNumber},
+            </if>
+            <if test="templateStoragepath != null and templateStoragepath != ''">
+                template_storagepath = #{templateStoragepath},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+            <if test="reviewStatus != null">
+                review_status = #{reviewStatus},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where template_id = #{templateId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update achievement_check_template
+        <set>
+            table_status = false
+        </set>
+        where template_id = #{templateId}
+    </delete>
+
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="AchievementCheckTemplateMap">
+        select template_name, upload_time, update_time, template_intro
+        from achievement_check_template
+        where table_status = true
+    </select>
+
+    <select id="queryAllWithPagination" resultMap="AchievementCheckTemplateMap">
+        select template_id, template_type, template_name, template_intro, remarks, upload_time, user_id, version_number, template_storagepath, table_status, review_status, update_time
+        from achievement_check_template
+        where table_status = true
+        limit #{offset},#{limit}
+    </select>
+
+
+</mapper>
+

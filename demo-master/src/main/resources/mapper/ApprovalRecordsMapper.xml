@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ApprovalRecordsMapper">
+
+    <resultMap type="com.example.demo.model.ApprovalRecords" id="ApprovalRecordsMap">
+        <result property="approvalId" column="approval_id" jdbcType="INTEGER"/>
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="approvalType" column="approval_type" jdbcType="VARCHAR"/>
+        <result property="approvalStatus" column="approval_status" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="approvalTime" column="approval_time" jdbcType="TIMESTAMP"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+    </resultMap>
+    <resultMap type="com.example.demo.model.ApprovalGet" id="ApprovalGetMaps">
+        <result property="approvalId" column="approval_id" jdbcType="INTEGER"/>
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="approvalType" column="approval_type" jdbcType="VARCHAR"/>
+        <result property="approvalStatus" column="approval_status" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="approvalTime" column="approval_time" jdbcType="TIMESTAMP"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="achievementName" column="achievement_name" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="achievementCategory" column="achievement_category" jdbcType="VARCHAR"/>
+        <result property="achievementVersion" column="achievement_version" jdbcType="VARCHAR"/>
+        <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--查询单个-->
+    <select id="queryById" resultMap="ApprovalRecordsMap">
+        select
+            approval_id, achievement_id, approval_type, approval_status, user_id, approval_time, table_status
+        from approval_records
+        where approval_id = #{approvalId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="approvalId" useGeneratedKeys="true">
+        insert into approval_records(achievement_id, approval_type, approval_status, user_id, approval_time, table_status)
+        values (#{achievementId}, #{approvalType}, #{approvalStatus}, #{userId}, #{approvalTime}, #{tableStatus})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update approval_records
+        <set>
+            <if test="achievementId != null">
+                achievement_id = #{achievementId},
+            </if>
+            <if test="approvalType != null and approvalType != ''">
+                approval_type = #{approvalType},
+            </if>
+            <if test="approvalStatus != null">
+                approval_status = #{approvalStatus},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="approvalTime != null">
+                approval_time = #{approvalTime},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+        </set>
+        where approval_id = #{approvalId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update approval_records
+        <set>
+            table_status = false
+        </set>
+        where approval_id = #{approvalId}
+    </delete>
+
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="ApprovalRecordsMap">
+        select
+            approval_id, achievement_id, approval_type, approval_status, user_id, approval_time, table_status
+        from approval_records
+        where table_status = true
+    </select>
+
+    <!--分页获取所有行信息-->
+    <select id="queryAllWithPagination" resultMap="ApprovalRecordsMap">
+        select
+            approval_id, achievement_id, approval_type, approval_status, user_id, approval_time, table_status
+        from approval_records
+        where table_status = true
+            limit #{offset}, #{limit}
+    </select>
+    <!--查找待审批的成果，approval_status = 0表示待审批，1表示审批通过，2表示被驳回-->
+    <select id="queryAllWithPaginationForApproval" resultMap="ApprovalGetMaps">
+        select
+        ar.approval_id,
+        ar.achievement_id,
+        ar.approval_type,
+        ar.approval_status,
+        ar.user_id,
+        ar.approval_time,
+        ar.table_status,
+        at.achievement_name,
+        at.achievement_category,
+        at.achievement_version,
+        at.organization_name,
+        au.user_name
+        from
+        approval_records ar
+        join
+        achievement_table at
+        on
+        ar.achievement_id = at.achievement_id
+        join
+        user_role_permissions au
+        on
+        ar.user_id = au.user_id
+        where
+        <if test="flag == 0">
+            ar.approval_status = 0
+        </if>
+        <if test="flag != 0">
+            ar.approval_status != 0
+        </if>
+        and ar.table_status = true
+
+        limit
+        #{offset}, #{limit}
+    </select>
+    <!--审批成果和驳回成果，1通过，2驳回-->
+    <update id="approvalTrue">
+        update approval_records
+        <set>
+            <if test="approvalStatus != null">
+                approval_status = #{approvalStatus},
+            </if>
+        </set>
+        where approval_id = #{approvalId}
+    </update>
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.FileRecordMapper">
+
+    <resultMap type="com.example.demo.model.FileRecord" id="FileRecordMap">
+        <result property="fileId" column="file_id" jdbcType="INTEGER"/>
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+        <result property="uploadTime" column="upload_time" jdbcType="TIMESTAMP"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FileRecordMap">
+        select
+file_id, achievement_id, file_name, upload_time, project_id, user_id, table_status
+        from file_record
+        where file_id = #{fileId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="fileId" useGeneratedKeys="true">
+        insert into file_record(achievement_id, file_name, upload_time, table_status, project_id, user_id)
+        values (#{achievementId}, #{fileName}, #{uploadTime}, true, #{projectId}, #{userId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update file_record
+        <set>
+            <if test="achievementId != null">
+                achievement_id = #{achievementId},
+            </if>
+            <if test="fileName != null and fileName != ''">
+                file_name = #{fileName},
+            </if>
+            <if test="uploadTime != null">
+                upload_time = #{uploadTime},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+        </set>
+        where file_id = #{fileId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update file_record
+        <set>
+            table_status = false
+        </set>
+        where file_id = #{fileId}
+    </delete>
+    
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="FileRecordMap"> 
+        select
+file_id, achievement_id, file_name, upload_time, project_id, user_id, table_status
+        from file_record
+        where table_status = true
+    </select>
+    
+    <!--分页获取所有行信息-->
+    <select id="queryAllWithPagination" resultMap="FileRecordMap"> 
+        select
+file_id, achievement_id, file_name, upload_time, project_id, user_id, table_status
+        from file_record
+        where table_status = true
+        limit #{offset}, #{limit}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="FileRecordMap">
+        select
+        file_id, achievement_id, file_name, upload_time, project_id, user_id, table_status
+        from file_record
+        <where>
+            <if test="fileId != null">
+                and file_id = #{fileId}
+            </if>
+            <if test="achievementId != null">
+                and achievement_id = #{achievementId}
+            </if>
+            <if test="fileName != null and fileName != ''">
+                and file_name = #{fileName}
+            </if>
+            <if test="uploadTime != null and uploadTime != ''">
+                and upload_time = #{uploadTime}
+            </if>
+            <if test="projectId != null">
+                and project_id = #{projectId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>  
+            and table_status = true   
+        </where>
+    </select>
+</mapper>
