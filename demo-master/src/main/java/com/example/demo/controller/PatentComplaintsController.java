@@ -72,7 +72,7 @@ public class PatentComplaintsController {
     public ResponseEntity<JSONResult> updateStatusToInProgress(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
         PatentComplaints complaint = this.patentComplaintsService.findById(complaintId);
         if( status == 0 && complaint != null ){
-            this.patentComplaintsService.updateComplaintStatus(complaintId, 1);
+//            this.patentComplaintsService.updateComplaintStatus(complaintId, 1);
             String msg = "投诉信息受理中...";
             int statusCode = HttpStatus.OK.value();
             JSONResult jsonResult = new JSONResult("success",statusCode,msg, status);
@@ -87,7 +87,7 @@ public class PatentComplaintsController {
         PatentComplaints complaint = this.patentComplaintsService.findById(complaintId);
         //PatentComplaints.ComplaintProcessStatus status = complaint.getComplaintProcess();
         if( status == 1 && complaint != null ){
-            this.patentComplaintsService.updateComplaintStatus(complaintId, status);
+//            this.patentComplaintsService.updateComplaintStatus(complaintId, status);
             String msg = "投诉处理成功，已受理...";
             int statusCode = HttpStatus.OK.value();
             JSONResult jsonResult = new JSONResult("success",statusCode,msg, 1);

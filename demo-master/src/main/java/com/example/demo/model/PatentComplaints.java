@@ -3,14 +3,17 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public class PatentComplaints {
     private Integer complaintId;
     private Integer intellectualPropertyId;
     private String complaintTime;
     private Integer userId;
 
-    private ComplaintProcessStatus complaintProcess;
+    //private ComplaintProcessStatus complaintProcess;
+    private Integer complaintProcess;
     private String complaintType;
     private String  complaintIntro;
     private Boolean tableStatus;;
@@ -32,39 +35,40 @@ public class PatentComplaints {
 //        }
 //    }
 
-    public enum ComplaintProcessStatus {
-        NOT_ACCEPTED(0, "未受理"),
-        IN_PROGRESS(1, "受理中"),
-        ACCEPTED(2, "已受理");
+//    public enum ComplaintProcessStatus {
+//        NOT_ACCEPTED(0, "未受理"),
+//        IN_PROGRESS(1, "受理中"),
+//        ACCEPTED(2, "已受理");
+//
+//        private final int code;
+//        private final String description;
+//
+//        ComplaintProcessStatus(int code, String description) {
+//            this.code = code;
+//            this.description = description;
+//        }
+//
+//        @JsonValue  // 确保 JSON 传输整数
+//        public int getCode() {
+//            return code;
+//        }
+//
+//        public String getDescription() {
+//            return description;
+//        }
+//
+//        // 通过整数获取枚举
+//        @JsonCreator
+//        public static ComplaintProcessStatus fromCode(int code) {
+//            for (ComplaintProcessStatus status : ComplaintProcessStatus.values()) {
+//                if (status.code == code) {
+//                    return status;
+//                }
+//            }
+//            throw new IllegalArgumentException("未知的投诉状态: " + code);
+//        }
+//    }
 
-        private final int code;
-        private final String description;
-
-        ComplaintProcessStatus(int code, String description) {
-            this.code = code;
-            this.description = description;
-        }
-
-        @JsonValue  // 确保 JSON 传输整数
-        public int getCode() {
-            return code;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        // 通过整数获取枚举
-        @JsonCreator
-        public static ComplaintProcessStatus fromCode(int code) {
-            for (ComplaintProcessStatus status : ComplaintProcessStatus.values()) {
-                if (status.code == code) {
-                    return status;
-                }
-            }
-            throw new IllegalArgumentException("未知的投诉状态: " + code);
-        }
-    }
 
     public Integer getComplaintId() {
         return complaintId;
@@ -98,13 +102,13 @@ public class PatentComplaints {
         this.complaintIntro = complaintIntro;
     }
 
-    public ComplaintProcessStatus getComplaintProcess() {
-        return complaintProcess;
-    }
+//    public ComplaintProcessStatus getComplaintProcess() {
+//        return complaintProcess;
+//    }
 
-    public void setComplaintProcess(ComplaintProcessStatus complaintProcess) {
-        this.complaintProcess = complaintProcess;
-    }
+//    public void setComplaintProcess(ComplaintProcessStatus complaintProcess) {
+//        this.complaintProcess = complaintProcess;
+//    }
 
     public String getComplaintTime() {
         return complaintTime;
@@ -128,5 +132,13 @@ public class PatentComplaints {
 
     public void setTableStatus(Boolean tableStatus) {
         this.tableStatus = tableStatus;
+    }
+
+    public Integer getComplaintProcess() {
+        return complaintProcess;
+    }
+
+    public void setComplaintProcess(Integer complaintProcess) {
+        this.complaintProcess = complaintProcess;
     }
 }

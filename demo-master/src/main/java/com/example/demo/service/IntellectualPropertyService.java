@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -162,14 +163,15 @@ public class IntellectualPropertyService implements IntellectualPropertyMapper {
      */
     @Scheduled(fixedRate = 60000 * 60 * 24)
     public void checkAndUpdateStatus() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");   //yyyy-MM-dd HH:mm:ss
         List<IntellectualProperty> intellectualProperties = this.findByIsExpiredFalse();
 //        log.info("专利: {}", intellectualProperties.get(0).getExpirationDate());
         for (IntellectualProperty ip : intellectualProperties) {
-            if (ip.getExpirationDate() != null && !ip.getExpirationDate().trim().isEmpty()) {
-                String expirationDateStr = ip.getExpirationDate().replace("'", "").trim();
-                LocalDateTime expirationLocalDateTime = LocalDateTime.parse(expirationDateStr, formatter);
+            if (ip.getExpirationDate() != null) {
+                String expirationDateStr = ip.getExpirationDate().substring(0, 10);
+//                log.info("{}" , expirationDateStr);
+                LocalDate expirationLocalDateTime = LocalDate.parse(expirationDateStr, formatter);
                 if (expirationLocalDateTime.isBefore(now) || expirationLocalDateTime.isEqual(now)) {
                     ip.setRenewalStatus(false);
                     this.updateIntellectualProperty(ip);
@@ -188,8 +190,8 @@ public class IntellectualPropertyService implements IntellectualPropertyMapper {
     @Override
     public Integer updateRenewalStatus(String expirationDate, Integer intellectualPropertyId) {
         IntellectualProperty intellectualProperty = this.queryById(intellectualPropertyId);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = sdf.format(Date.from(LocalDateTime.parse(expirationDate).atZone(ZoneId.systemDefault()).toInstant()));
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = expirationDate.substring(0, 10);
         intellectualProperty.setExpirationDate(formattedDate);
         intellectualProperty.setRenewalStatus(true);
         return this.updateIntellectualProperty(intellectualProperty);
