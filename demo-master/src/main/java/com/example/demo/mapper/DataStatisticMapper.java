@@ -1,9 +1,10 @@
 package com.example.demo.mapper;
 import com.example.demo.model.DataStatistic;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
-
+@Mapper
 public interface DataStatisticMapper {
 
     // 用户登录时插入一条记录

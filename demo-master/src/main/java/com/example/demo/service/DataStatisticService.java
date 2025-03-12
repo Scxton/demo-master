@@ -55,29 +55,40 @@ public class DataStatisticService {
 //    }
 
     public Integer updateLogOutInfo(Integer userId, String userName) {
-        UserRolePermissions res = userRolePermissionsMapper.getUserIdByUserName(userName);
-        Integer userid = res.getUserId();
+        log.info("updateLogOutInfo");
+       // UserRolePermissions res = userRolePermissionsMapper.getUserIdByUserName(userName);
+      //  Integer userid = res.getUserId();
         // 获取的 Date 对象（例如当前时间）
         Date logOut_Time = new Date();
 
         // 将 Date 转换为 yyyy-MM-dd HH:mm:ss 格式的字符串
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        log.info("1111111111");
         String formattedLogOutTime = sdf.format(logOut_Time);
+        log.info("formattedLogOutTime "+formattedLogOutTime);
         String onlineDuration = onlineUserDuration(userName);
-        return this.dataStatisticMapper.updateLogOutInfo(userid, userName, formattedLogOutTime, onlineDuration);
+        log.info("onlineDuration "+onlineDuration);
+        return this.dataStatisticMapper.updateLogOutInfo(userId, userName, formattedLogOutTime, onlineDuration);
     }
 
 
     // 根据用户名获取用户的登录时间
     public String getLogInTimeByUsername(String userName)
     {
+        log.info("getLogInTimeByUsername");
+        log.info("userName "+userName);
+
         return this.dataStatisticMapper.getLogInTimeByUsername(userName);
     }
 
     // 计算当前用户的在线时长
     public String onlineUserDuration(String userName)
     {
+        log.info("onlineUserDuration");
         String logInTime = getLogInTimeByUsername(userName);
+        log.info("logInTime "+logInTime);
+
+
         //LocalTime time = logInTime
         // 将登录时间（字符串）解析为 LocalDateTime
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

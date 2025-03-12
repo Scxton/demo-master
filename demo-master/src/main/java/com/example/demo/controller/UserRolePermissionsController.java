@@ -76,6 +76,10 @@ public class UserRolePermissionsController {
     @PutMapping("/edit")
     @PreAuthorize("hasAuthority('ROLE_1')")
     public ResponseEntity<JSONResult> edit(@RequestBody UserRolePermissions userRolePermissions) {
+        if (userRolePermissions.getUserPwd() != null) {
+            // 密码加密
+            userRolePermissions.setUserPwd(passwordEncoder.encode(userRolePermissions.getUserPwd()));
+        }
         Integer res = this.userRolePermissionsService.update(userRolePermissions);
         String msg = "数据编辑成功";
         int statusCode = HttpStatus.OK.value();

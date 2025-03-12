@@ -30,6 +30,7 @@ public class KnowledgeGraphController {
         JSONResult jsonResult = new JSONResult();
         log.info("knowledge graph all get list");
         if(knowList.size() > 0){
+            log.info("size",knowList.size());
             jsonResult.setResultCode(200);
             jsonResult.setType("success");
             jsonResult.setData(knowList);

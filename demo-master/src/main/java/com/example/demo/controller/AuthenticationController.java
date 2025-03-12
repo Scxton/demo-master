@@ -95,6 +95,7 @@ public class AuthenticationController {
      */
     @PostMapping("/logout")
     public ResponseEntity<JSONResult> logout(HttpServletRequest request) {
+        log.info("logout");
         // 从HTTP请求的头部获取授权信息
         final String authorizationHeader = request.getHeader("Authorization");
         String jwt = null;
@@ -107,11 +108,13 @@ public class AuthenticationController {
             JSONResult jsonResult = new JSONResult("success", statusCode, "注销成功", null);
 
 
-            // 获取当前用户名
+//             获取当前用户名
             String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-            //更新用户登出信息
+            log.info("userName:{}", userName);
+//            更新用户登出信息
             UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(userName);
             Integer userid = res.getUserId();
+            log.info("userid:{}", userid);
             dataStatisticService.updateLogOutInfo(userid, userName);
 
 

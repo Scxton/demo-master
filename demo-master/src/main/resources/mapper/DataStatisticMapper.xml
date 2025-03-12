@@ -39,10 +39,10 @@
 
 
     <!-- 根据用户名获取用户登录时间 -->
-    <select id="getLogInTimeByuser_name" resultType="String">
-        SELECT login_time
-        FROM statistics_info
-        WHERE user_name = #{userName} AND table_status = true
+    <select id="getLogInTimeByUsername" resultType="String">
+        SELECT login_time FROM statistics_info WHERE user_name = #{userName} AND table_status = true
+        ORDER BY login_time DESC
+        LIMIT 1;
     </select>
 
 

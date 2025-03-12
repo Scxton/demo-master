@@ -1,21 +1,31 @@
 package com.example.demo.utils;
-
+import java.util.logging.Logger;
 import com.example.demo.model.AchievementTable;
-
+import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.Map;
+@Slf4j
 public class KnowledgeGraph {
-    
+    private static final Logger logger = Logger.getLogger(KnowledgeGraph.class.getName());
+
     public static Object[] triplue(Object headEntity, Object relation, Object tailEntity){
         Object[] kg = new Object[]{};
         kg = new Object[]{headEntity, relation, tailEntity};
+        String tripleStr = String.format("三元组: [%s] --(%s)--> [%s]",
+                headEntity != null ? headEntity : "null",
+                relation != null ? relation : "null",
+                tailEntity != null ? tailEntity : "null");
+        logger.info(tripleStr);
+
         return kg;
     }
 
     public static List<Object[]> getALL(List<AchievementTable> allinfo){
+        Map<String, Integer> relationCounts = new HashMap<>();
         List<Object[]> list = new ArrayList<Object[]>();
+        log.info("111111111111111111111111111111");
 
         for(AchievementTable at: allinfo){
             //知识图谱抽取规则
