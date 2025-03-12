@@ -7,7 +7,7 @@ import com.example.demo.mapper.PatentComplaintsMapper;
 import com.example.demo.mapper.UserRolePermissionsMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.example.demo.model.PatentComplaints.ComplaintProcessStatus;
+//import com.example.demo.model.PatentComplaints.ComplaintProcessStatus;
 
 import javax.annotation.Resource;
 
@@ -21,7 +21,7 @@ public class PatentComplaintsService {
     @Resource
     private UserRolePermissionsMapper userRolePermissionsMapper;
 
-    private ComplaintProcessStatus complaintProcessStatus;
+//    private ComplaintProcessStatus complaintProcessStatus;
 
     public PatentComplaints findById(Integer complaintId){
         return this.patentComplaintsMapper.findById(complaintId);
@@ -48,10 +48,10 @@ public class PatentComplaintsService {
     }
 
     //更改审核状态
-    public Integer updateComplaintStatus(Integer complaintId, Integer complaintStatus){
-        Integer status = complaintProcessStatus.getCode();
-        return this.patentComplaintsMapper.updateComplaintStatus(complaintId, status);
-    }
+//    public Integer updateComplaintStatus(Integer complaintId, Integer complaintStatus){
+//        Integer status = complaintProcessStatus.getCode();
+//        return this.patentComplaintsMapper.updateComplaintStatus(complaintId, status);
+//    }
 
 
 //     管理员查看投诉详情，修改状态为 "受理中"

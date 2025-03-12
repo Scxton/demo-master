@@ -2,14 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.PatentComplaintsMapper">
     <resultMap type="com.example.demo.model.PatentComplaints" id="PatentComplaintsMap">
-        <result column="complaintId" property="complaint_id" jdbcType="INTEGER"/>
-        <result column="intellectualPropertyId" property="intellectual_property_id" jdbcType="INTEGER"/>
-        <result column="complaintTime" property="complaint_time" jdbcType="VARCHAR"/>
-        <result column="userId" property="user_id" jdbcType="INTEGER"/>
-        <result column="complaintProcess" property="processing_status" jdbcType="INTEGER"/>
-        <result column="complaintType" property="infringement_complaint_type" jdbcType="VARCHAR"/>
-        <result column="complaintIntro" property="complaint_intro" jdbcType="VARCHAR"/>
-        <result column="tableStatus" property="table_status" jdbcType="BOOLEAN"/>
+        <id property="complaintId" column="complaint_id" jdbcType="INTEGER"/>
+        <result property="intellectualPropertyId" column="intellectual_property_id" jdbcType="INTEGER"/>
+        <result property="complaintTime" column="complaint_time" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="complaintProcess" column="processing_status" jdbcType="INTEGER"/>
+        <result property="complaintType" column="infringement_complaint_type" jdbcType="VARCHAR"/>
+        <result property="complaintIntro" column="complaint_intro" jdbcType="VARCHAR"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+
     </resultMap>
 
     <select id="queryByuserId" resultMap="PatentComplaintsMap">
@@ -20,10 +21,10 @@
     </select>
 
     <insert id="insertComplaint" keyProperty="complaintId" useGeneratedKeys="true">
-    insert into patent_complaints(intellectual_property_id, complaint_time, user_id, processing_status,
-                                  infringement_complaint_type, complaint_intro,table_status)
-    values (#{intellectualPropertyId}, #{complaintTime}, #{userId}, 0, #{complaintType},
-            #{complaintIntro}, true)
+        insert into patent_complaints(intellectual_property_id, complaint_time, user_id, processing_status,
+                                      infringement_complaint_type, complaint_intro,table_status)
+        values (#{intellectualPropertyId}, #{complaintTime}, #{userId}, 0, #{complaintType},
+                #{complaintIntro}, true)
     </insert>
 
     <!-- 更新投诉状态 -->
@@ -32,14 +33,14 @@
     </update>
 
     <!-- 更新投诉状态未”受理中“ -->
-<!--    <update id="updateStatusToInProgress">-->
-<!--        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true-->
-<!--    </update>-->
+    <!--    <update id="updateStatusToInProgress">-->
+    <!--        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true-->
+    <!--    </update>-->
 
     <!-- 更新投诉状态未”已受理“ -->
-<!--    <update id="updateStatusToAccepted">-->
-<!--        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true-->
-<!--    </update>-->
+    <!--    <update id="updateStatusToAccepted">-->
+    <!--        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true-->
+    <!--    </update>-->
 
     <delete id="deleteByuserId">
         update patent_complaints
@@ -58,9 +59,7 @@
     </delete>
 
     <select id="queryAll" resultMap="PatentComplaintsMap">
-        select
-            *
-        from patent_complaints
+        select * from patent_complaints
         where table_status = true
 
     </select>

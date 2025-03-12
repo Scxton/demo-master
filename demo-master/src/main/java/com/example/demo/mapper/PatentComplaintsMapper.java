@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import com.example.demo.model.PatentComplaints;
-import com.example.demo.model.PatentComplaints.ComplaintProcessStatus;
+//import com.example.demo.model.PatentComplaints.ComplaintProcessStatus;
 
 public interface PatentComplaintsMapper {
 
