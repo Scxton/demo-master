@@ -70,14 +70,22 @@ public class PatentComplaintsController {
     //查询投诉详情，并将状态修改为 "受理中"
     @GetMapping("/complaintId")
     public ResponseEntity<JSONResult> updateStatusToInProgress(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
+
         PatentComplaints complaint = this.patentComplaintsService.findById(complaintId);
+        log.info("complaint:{}",complaint.getComplaintId());
+        log.info("complaint:{}",complaint.getComplaintIntro());
+        log.info("status before :{}",status);
+
         if( status == 0 && complaint != null ){
 //            this.patentComplaintsService.updateComplaintStatus(complaintId, 1);
             String msg = "投诉信息受理中...";
             int statusCode = HttpStatus.OK.value();
+            log.info("status now:{}",statusCode);
             JSONResult jsonResult = new JSONResult("success",statusCode,msg, status);
+            log.info("complaint now :{}",complaint.getComplaintProcess());
             return ResponseEntity.ok(jsonResult);
         }
+
         return ResponseEntity.ok(JSONResult.error(1001, "投诉信息待受理！"));
     }
 

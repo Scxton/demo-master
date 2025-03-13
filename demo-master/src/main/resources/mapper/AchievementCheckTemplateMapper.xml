@@ -8,13 +8,13 @@
         <result property="templateName" column="template_name" jdbcType="VARCHAR"/>
         <result property="templateIntro" column="template_intro" jdbcType="VARCHAR"/>
         <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="uploadTime" column="upload_time" jdbcType="TIMESTAMP"/>
+        <result property="uploadTime" column="upload_time" jdbcType="VARCHAR"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="versionNumber" column="version_number" jdbcType="VARCHAR"/>
         <result property="templateStoragepath" column="template_storagepath" jdbcType="VARCHAR"/>
         <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
         <result property="reviewStatus" column="review_status" jdbcType="BOOLEAN"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
@@ -85,7 +85,7 @@ template_id, template_type, template_name, template_intro, remarks, upload_time,
 
     <!--获取所有行信息-->
     <select id="queryAll" resultMap="AchievementCheckTemplateMap">
-        select template_name, upload_time, update_time, template_intro
+        select *
         from achievement_check_template
         where table_status = true
     </select>

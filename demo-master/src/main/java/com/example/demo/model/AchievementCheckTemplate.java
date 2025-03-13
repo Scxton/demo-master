@@ -32,6 +32,8 @@ public class AchievementCheckTemplate implements Serializable {
 
     private Boolean reviewStatus;
 
+    private String  updateTime;
+
 
     public Integer getTemplateId() {
         return templateId;
@@ -119,6 +121,12 @@ public class AchievementCheckTemplate implements Serializable {
 
     public void setReviewStatus(Boolean reviewStatus) {
         this.reviewStatus = reviewStatus;
+    }
+    public String getUpdateTime() {
+        return updateTime;
+    }
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
 }

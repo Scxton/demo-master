@@ -1,17 +1,21 @@
 package com.example.demo.controller;
-
 import com.example.demo.model.AchievementCheckTemplate;
 import com.example.demo.service.AchievementCheckTemplateService;
 import com.example.demo.utils.JSONResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import com.example.demo.model.UserRolePermissions;
+import com.example.demo.model.AchievementCheckTemplateWrapper;
+import com.example.demo.service.UserRolePermissionsService;
 
 /**
  * (AchievementCheckTemplate)表控制层
@@ -20,6 +24,7 @@ import java.util.List;
  * @since 2024-12-10 15:53:41
  */
 @RestController
+@Slf4j
 @RequestMapping("achievementCheckTemplate")
 public class AchievementCheckTemplateController {
     /**
@@ -27,6 +32,9 @@ public class AchievementCheckTemplateController {
      */
     @Resource
     private AchievementCheckTemplateService achievementCheckTemplateService;
+
+    @Resource
+    private UserRolePermissionsService userRolePermissionsService;
 
     /**
      * 通过主键查询单条数据
@@ -39,7 +47,11 @@ public class AchievementCheckTemplateController {
         AchievementCheckTemplate res = this.achievementCheckTemplateService.queryById(id);
         String msg = "查询成功";
         int statusCode = HttpStatus.OK.value();
-        JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
+        int userid = res.getUserId();
+        UserRolePermissions user = this.userRolePermissionsService.queryById(userid);
+        String userName = user.getUserName();
+        AchievementCheckTemplateWrapper wrapper = new AchievementCheckTemplateWrapper(res,userName);
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,wrapper);
         return ResponseEntity.ok(jsonResult);
     }
 
@@ -99,9 +111,20 @@ public class AchievementCheckTemplateController {
     @GetMapping("/queryAll")
     public ResponseEntity<JSONResult> queryAll() {
         List<AchievementCheckTemplate> res = this.achievementCheckTemplateService.queryAll();
+        log.info("res:{}",res.size());
+
+
         String msg = "获取所有模板成功";
+        List<AchievementCheckTemplateWrapper> templateWrappers = new ArrayList<>(Collections.emptyList());
         int statusCode = HttpStatus.OK.value();
-        JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
+        for (AchievementCheckTemplate template : res) {
+            Integer userId = template.getUserId();
+            log.info("userId:{}", userId);
+            UserRolePermissions user = this.userRolePermissionsService.queryById(userId);
+            String userName = user.getUserName();
+            templateWrappers.add(new AchievementCheckTemplateWrapper(template,userName));
+        }
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,templateWrappers);
         return ResponseEntity.ok(jsonResult);
     }
 
@@ -109,9 +132,17 @@ public class AchievementCheckTemplateController {
     public ResponseEntity<JSONResult> queryAllWithPagination(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         List<AchievementCheckTemplate> res = this.achievementCheckTemplateService.queryAllWithPagination(pageNum, pageSize);
-        String msg = "获取所有模板成功";
+        String msg = "分页获取所有模板成功";
+        List<AchievementCheckTemplateWrapper> templateWrappers = new ArrayList<>(Collections.emptyList());
         int statusCode = HttpStatus.OK.value();
-        JSONResult jsonResult= new JSONResult("success",statusCode,msg,res);
+        for (AchievementCheckTemplate template : res) {
+            Integer userId = template.getUserId();
+            UserRolePermissions user = this.userRolePermissionsService.queryById(userId);
+            String userName = user.getUserName();
+            templateWrappers.add(new AchievementCheckTemplateWrapper(template,userName));
+        }
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,templateWrappers);
         return ResponseEntity.ok(jsonResult);
     }
+
 }
