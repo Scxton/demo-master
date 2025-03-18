@@ -21,6 +21,11 @@ public class OrganizationInfo implements Serializable {
 
     private Boolean tableStatus;
 
+    private String organizationAddress;
+    private String organizationPhone;
+    private String contactsName;
+    private String contactsPhone;
+
 
     public Integer getOrganizationId() {
         return organizationId;
@@ -60,6 +65,30 @@ public class OrganizationInfo implements Serializable {
 
     public void setTableStatus(Boolean tableStatus) {
         this.tableStatus = tableStatus;
+    }
+    public String getOrganizationAddress() {
+        return organizationAddress;
+    }
+    public void setOrganizationAddress(String organizationAddress) {
+        this.organizationAddress = organizationAddress;
+    }
+    public String getOrganizationPhone() {
+        return organizationPhone;
+    }
+    public void setOrganizationPhone(String organizationPhone) {
+        this.organizationPhone = organizationPhone;
+    }
+    public String getContactsName() {
+        return contactsName;
+    }
+    public void setContactsName(String contactsName) {
+        this.contactsName = contactsName;
+    }
+    public String getContactsPhone() {
+        return contactsPhone;
+    }
+    public void setContactsPhone(String contactsPhone) {
+        this.contactsPhone = contactsPhone;
     }
 
 }

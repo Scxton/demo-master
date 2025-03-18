@@ -69,8 +69,10 @@ public class AuthenticationController {
             JSONResult jsonResult = new JSONResult("success", statusCode, SUCCESS_MSG, jwt);
             log.info("qqqqqq");
 
-            //添加用户登录信息
+            //添加用户登录信息  更新用户登录状态
             UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(authenticationRequest.getUsername());
+            res.setUserStatus(1);
+            userRolePermissionsService.update(res);
             Integer userid = res.getUserId();
             log.info("userid:{}", userid);
 
@@ -111,8 +113,10 @@ public class AuthenticationController {
 //             获取当前用户名
             String userName = SecurityContextHolder.getContext().getAuthentication().getName();
             log.info("userName:{}", userName);
-//            更新用户登出信息
+//            更新用户登出信息  更新用户登录状态
             UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(userName);
+            res.setUserStatus(0);
+            userRolePermissionsService.update(res);
             Integer userid = res.getUserId();
             log.info("userid:{}", userid);
             dataStatisticService.updateLogOutInfo(userid, userName);
