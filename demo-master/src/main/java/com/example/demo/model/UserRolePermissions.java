@@ -18,7 +18,7 @@ public class UserRolePermissions implements Serializable {
 
     private Integer roleId;
 
-    // 在线状态
+    // 在线状态 0 离线 1 在线
     private Integer userStatus;
 
     private Date applicationTime;

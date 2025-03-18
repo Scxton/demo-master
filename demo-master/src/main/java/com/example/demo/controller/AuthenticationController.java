@@ -9,7 +9,6 @@ import com.example.demo.service.UserRolePermissionsService;
 import com.example.demo.utils.JSONResult;
 import com.example.demo.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.service.DataStatisticService;
 
 import javax.servlet.http.HttpServletRequest;
-
-import java.util.Map;
 
 @RestController
 @Slf4j
@@ -59,7 +56,7 @@ public class AuthenticationController {
      * @return 返回包含JWT令牌的响应结果
      */
     @PostMapping("/authenticate")
-    public ResponseEntity<JSONResult> createAuthenticationToken(@Param("userId") Integer userId, @RequestBody JwtRequest authenticationRequest) {
+    public ResponseEntity<JSONResult> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
         try {
             log.info("收到认证请求，用户名: {}", authenticationRequest.getUsername());
             authenticationManager.authenticate(
@@ -73,11 +70,11 @@ public class AuthenticationController {
             log.info("qqqqqq");
 
             //添加用户登录信息
-//            UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(authenticationRequest.getUsername());
-//            Integer userid = res.getUserId();
-//            log.info("userid:{}", userid);
+            UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(authenticationRequest.getUsername());
+            Integer userid = res.getUserId();
+            log.info("userid:{}", userid);
 
-            dataStatisticService.userLoginInsert(userId, authenticationRequest.getUsername());
+            dataStatisticService.userLoginInsert(userid, authenticationRequest.getUsername());
 
             return ResponseEntity.ok(jsonResult);
         } catch (BadCredentialsException e) {
@@ -97,9 +94,8 @@ public class AuthenticationController {
      * @return 返回注销结果
      */
     @PostMapping("/logout")
-    public ResponseEntity<JSONResult> logout(@Param("userId") Integer userId, @Param("userName") String userName, HttpServletRequest request) {
+    public ResponseEntity<JSONResult> logout(HttpServletRequest request) {
         log.info("logout");
-
         // 从HTTP请求的头部获取授权信息
         final String authorizationHeader = request.getHeader("Authorization");
         String jwt = null;
@@ -113,14 +109,13 @@ public class AuthenticationController {
 
 
 //             获取当前用户名
-//            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-            log.info("用户名:" + userName + "已注销");
+            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+            log.info("userName:{}", userName);
 //            更新用户登出信息
-//            UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(userName);
-//            Integer userid = res.getUserId();
-//            log.info("userid:{}", userid);
-            dataStatisticService.updateLogOutInfo(userId, userName);
+            UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(userName);
+            Integer userid = res.getUserId();
+            log.info("userid:{}", userid);
+            dataStatisticService.updateLogOutInfo(userid, userName);
 
 
             return ResponseEntity.ok(jsonResult);

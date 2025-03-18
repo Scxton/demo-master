@@ -6,20 +6,21 @@
 #<property name="hibernate.dialect" value="org.hibernate.dialect.KingbaseDialect" />
 
 server:
-  #port: 8082
-  port: 8082
+  port: 8000
 spring:
   application:
     name: user-service
-#  thymeleaf:
-#    check-template-location: false
-#    check-template: false
+  #  thymeleaf:
+  #    check-template-location: false
+  #    check-template: false
   datasource:
-#   url: jdbc:kingbase://192.168.16.117:54321/DB1
-#    url: jdbc:kingbase://192.168.92.117:54321/DB1
     url: jdbc:kingbase://localhost:54321/DB1
-    username: SYSTEM
-    password: SYSTEM
+    #    url: jdbc:kingbase://192.168.1.25:54321/DB1
+    #    url: jdbc:kingbase://192.168.16.117:54321/DB1
+    #    username: SYSTEM
+    #    password: SYSTEM
+    username: system
+    password: krms
     driver-class-name: com.kingbase.Driver
 mybatis:
   mapper-locations: classpath:**/mapper/*.xml
