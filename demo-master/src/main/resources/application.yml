@@ -6,7 +6,7 @@
 #<property name="hibernate.dialect" value="org.hibernate.dialect.KingbaseDialect" />
 
 server:
-  port: 8000
+  port: 8082
 spring:
   application:
     name: user-service
@@ -19,8 +19,8 @@ spring:
     #    url: jdbc:kingbase://192.168.16.117:54321/DB1
     #    username: SYSTEM
     #    password: SYSTEM
-    username: system
-    password: krms
+    username: SYSTEM
+    password: SYSTEM
     driver-class-name: com.kingbase.Driver
 mybatis:
   mapper-locations: classpath:**/mapper/*.xml
