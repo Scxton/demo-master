@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
-
+@Slf4j
 /**
  * (UserRolePermissions)表控制层
  *
@@ -162,6 +162,7 @@ public class UserRolePermissionsController {
     public ResponseEntity<JSONResult> queryByLike(@RequestParam String userName,
                                                     @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        log.info("userName:{}", userName);
         List<UserRolePermissions> res = this.userRolePermissionsService.queryByLike(userName, pageNum, pageSize);
         String msg = "模糊查询成功";
         int statusCode = HttpStatus.OK.value();

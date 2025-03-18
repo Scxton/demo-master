@@ -127,7 +127,7 @@ public class PatentComplaintsController {
     // 查询所有投诉信息
     @GetMapping("/queryAll")
     public ResponseEntity<JSONResult> queryAll() {
-        log.info("queryAll");
+
         List<PatentComplaints> res = this.patentComplaintsService.queryAll();
         log.info("res:{}",res.size());
 

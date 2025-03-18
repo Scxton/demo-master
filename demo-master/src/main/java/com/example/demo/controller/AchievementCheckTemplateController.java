@@ -63,6 +63,7 @@ public class AchievementCheckTemplateController {
      */
     @PostMapping("/add")
     public ResponseEntity<JSONResult> add(@RequestBody AchievementCheckTemplate achievementCheckTemplate) {
+        log.info("achievementCheckTemplate ");
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         achievementCheckTemplate.setUploadTime(now.format(formatter2));
@@ -81,6 +82,7 @@ public class AchievementCheckTemplateController {
      */
     @PostMapping("/edit")
     public ResponseEntity<JSONResult> edit(@RequestBody AchievementCheckTemplate achievementCheckTemplate) {
+        log.info("edit achievementCheckTemplate ");
         Integer  res = this.achievementCheckTemplateService.update(achievementCheckTemplate);
         String msg = "数据编辑成功";
         int statusCode = HttpStatus.OK.value();
