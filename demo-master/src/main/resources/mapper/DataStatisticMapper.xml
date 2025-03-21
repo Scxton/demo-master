@@ -20,15 +20,21 @@
         VALUES (#{userId}, #{userName}, #{logInTime}, true, #{logOutTime});
     </insert>
 
-    <!-- 更新登录时间 -->
+    <!-- 更新登出时间 -->
+<!--    <update id="updateLogOutInfo">-->
+<!--        UPDATE statistics_info-->
+<!--        SET logout_time = #{logOutTime}, table_status = false, duration = #{duration}-->
+<!--        WHERE user_name = #{userName} AND table_status = true-->
+<!--    </update>-->
+
     <update id="updateLogOutInfo">
         UPDATE statistics_info
-        SET logout_time = #{logOutTime},  <!-- 当前时间 -->
-        table_status = false,   <!-- 设置为 false，表示用户登出 -->
-        duration = #{duration}
-        WHERE user_id = #{userId}
-        AND user_name = #{userName}
-        AND table_status = true
+        SET logout_time = #{logOutTime},
+            table_status = false,
+            duration = #{duration}
+        WHERE user_name = #{userName}
+          AND table_status = true
+          AND login_time = (SELECT MAX(login_time) FROM statistics_info WHERE user_name = #{userName});
     </update>
 
     <!-- 统计当前在线用户数 -->

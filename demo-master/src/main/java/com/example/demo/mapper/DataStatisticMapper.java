@@ -12,10 +12,10 @@ public interface DataStatisticMapper {
 
 
     // 更新登出时长
-    Integer updateLogOutInfo(@Param("userId") Integer userId, @Param("userName") String userName, @Param("logOutTime") String logOutTime, @Param("duration") String duration);
+    Integer updateLogOutInfo(@Param("userName") String userName, @Param("logOutTime") String logOutTime, @Param("duration") String duration);
 
     // 获取当前用户在线时长
-    Integer onlineUserDuration(@Param("userId") Integer userId, @Param("userName") String userName, @Param("logInTime") String logInTime, @Param("logOutTime") String logOutTime);
+    Integer onlineUserDuration(@Param("userName") String userName, @Param("logInTime") String logInTime, @Param("logOutTime") String logOutTime);
     // 获取最新的一条在线记录
     //Integer latestOnLineRecord(@Param("userId") Integer userId);
 

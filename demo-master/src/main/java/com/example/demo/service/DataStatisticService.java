@@ -30,7 +30,7 @@ public class DataStatisticService {
     private UserRolePermissionsMapper userRolePermissionsMapper;
 
 
-    public Integer userLoginInsert(Integer userid, String userName) {
+    public Integer userLoginInsert(Integer userId, String userName) {
      //   UserRolePermissions res = userRolePermissionsMapper.getUserIdByUserName(userName);
       //  Integer userId = res.getUserId();
 
@@ -41,7 +41,7 @@ public class DataStatisticService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedLogInTime = sdf.format(logIn_Time);
         log.info("1111111111");
-        return this.dataStatisticMapper.userLoginInsert(userid, userName, formattedLogInTime, formattedLogInTime, null);
+        return this.dataStatisticMapper.userLoginInsert(userId, userName, formattedLogInTime, formattedLogInTime, null);
     }
 
 //    @Override
@@ -54,7 +54,7 @@ public class DataStatisticService {
 //        return null;
 //    }
 
-    public Integer updateLogOutInfo(Integer userId, String userName) {
+    public Integer updateLogOutInfo(String userName) {
         log.info("updateLogOutInfo");
        // UserRolePermissions res = userRolePermissionsMapper.getUserIdByUserName(userName);
       //  Integer userid = res.getUserId();
@@ -65,10 +65,10 @@ public class DataStatisticService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         log.info("1111111111");
         String formattedLogOutTime = sdf.format(logOut_Time);
-        log.info("formattedLogOutTime "+formattedLogOutTime);
+        log.info("formattedLogOutTime " + formattedLogOutTime);
         String onlineDuration = onlineUserDuration(userName);
         log.info("onlineDuration "+onlineDuration);
-        return this.dataStatisticMapper.updateLogOutInfo(userId, userName, formattedLogOutTime, onlineDuration);
+        return this.dataStatisticMapper.updateLogOutInfo(userName, formattedLogOutTime, onlineDuration);
     }
 
 

@@ -78,8 +78,8 @@ public class AuthenticationController {
             UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(authenticationRequest.getUsername());
             res.setUserStatus(1);
             userRolePermissionsService.update(res);
-            Integer userid = res.getUserId();
-            log.info("userid:{}", userid);
+//            Integer userid = res.getUserId();
+//            log.info("userid:{}", userid);
 
             dataStatisticService.userLoginInsert(userId, authenticationRequest.getUsername());
 
@@ -101,7 +101,7 @@ public class AuthenticationController {
      * @return 返回注销结果
      */
     @PostMapping("/logout")
-    public ResponseEntity<JSONResult> logout(@Param("userId") Integer userId, @Param("userName") String userName, HttpServletRequest request) {
+    public ResponseEntity<JSONResult> logout(@Param("userName") String userName, HttpServletRequest request) {
         log.info("logout");
 
         // 从HTTP请求的头部获取授权信息
@@ -119,13 +119,19 @@ public class AuthenticationController {
 //             获取当前用户名
 //            String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 
-            log.info("用户名:" + userName + "已注销");
+//            String userName = jwtUtil.extractUsername(jwt);
 
             //            更新用户登出信息  更新用户登录状态
             UserRolePermissions res = userRolePermissionsService.getUserIdByUserName(userName);
             res.setUserStatus(0);
             userRolePermissionsService.update(res);
-            dataStatisticService.updateLogOutInfo(userId, userName);
+
+
+//            Integer userId = userRolePermissionsService.getUserIdByUserName(userName).getUserId();
+
+
+            dataStatisticService.updateLogOutInfo(userName);
+            log.info("用户名:" + userName + "已注销");
 
 
             return ResponseEntity.ok(jsonResult);
