@@ -61,7 +61,7 @@ public class ProjectRecordsController {
      * @param projectRecords 实体
      * @return 编辑结果
      */
-    @PutMapping("/edit")
+    @PostMapping("/edit")
     public ResponseEntity<JSONResult> edit(@RequestBody ProjectRecords projectRecords) {
         Integer res = this.projectRecordsService.update(projectRecords);
         String msg = "数据编辑成功";
