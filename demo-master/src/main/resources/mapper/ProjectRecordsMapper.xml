@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ProjectRecordsMapper">
+
+    <resultMap type="com.example.demo.model.ProjectRecords" id="ProjectRecordsMap">
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+        <result property="organizationId" column="organization_id" jdbcType="INTEGER"/>
+        <result property="projectIntro" column="project_intro" jdbcType="VARCHAR"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ProjectRecordsMap">
+        select
+project_id, achievement_id, project_name, organization_id, project_intro, table_status
+        from project_records
+        where project_id = #{projectId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="projectId" useGeneratedKeys="true">
+        insert into project_records(achievement_id, project_name, organization_id, project_intro, table_status)
+        values (#{achievementId}, #{projectName}, #{organizationId}, #{projectIntro}, #{tableStatus})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update project_records
+        <set>
+            <if test="achievementId != null">
+                achievement_id = #{achievementId},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                project_name = #{projectName},
+            </if>
+            <if test="organizationId != null">
+                organization_id = #{organizationId},
+            </if>
+            <if test="projectIntro != null and projectIntro != ''">
+                project_intro = #{projectIntro},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+        </set>
+        where project_id = #{projectId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update project_records
+        <set>
+            table_status = false
+        </set>
+        where project_id = #{projectId}
+    </delete>
+    
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="ProjectRecordsMap"> 
+        select
+project_id, achievement_id, project_name, organization_id, project_intro, table_status
+        from project_records
+        where table_status = true
+    </select>
+    
+    <!--分页获取所有行信息-->
+    <select id="queryAllWithPagination" resultMap="ProjectRecordsMap"> 
+        select
+project_id, achievement_id, project_name, organization_id, project_intro, table_status
+        from project_records
+        where table_status = true
+        limit #{offset}, #{limit}
+    </select>
+</mapper>
