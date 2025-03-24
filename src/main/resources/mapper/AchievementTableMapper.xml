@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.AchievementTableMapper">
+
+    <resultMap type="com.example.demo.model.AchievementTable" id="AchievementTableMap">
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="achievementName" column="achievement_name" jdbcType="VARCHAR"/>
+        <result property="achievementCategory" column="achievement_category" jdbcType="VARCHAR"/>
+        <result property="achievementForm" column="achievement_form" jdbcType="VARCHAR"/>
+        <result property="intellectualPropertyId" column="intellectual_property_id" jdbcType="INTEGER"/>
+        <result property="achievementBelongingOrganization" column="achievement_belonging_organization" jdbcType="INTEGER"/>
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="achievementVersion" column="achievement_version" jdbcType="VARCHAR"/>
+        <result property="achievementIntro" column="achievement_intro" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="uploadTime" column="upload_time" jdbcType="TIMESTAMP"/>
+        <result property="templateId" column="template_id" jdbcType="INTEGER"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="achievementDownloadCount" column="achievement_download_count" jdbcType="INTEGER"/>
+        <result property="searchCount" column="search_count" jdbcType="INTEGER"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
+        <result property="achievementNo" column="achievement_no" jdbcType="VARCHAR"/>
+        <result property="projectNo" column="project_no" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="auditFlag" column="audit_flag" jdbcType="INTEGER"/>
+        <result property="subjectCategory" column="subject_category" jdbcType="VARCHAR"/>
+        <result property="technologyCategory" column="technology_category" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AchievementTableMap">
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, audit_flag, subject_category, technology_category
+        from achievement_table
+        where achievement_id = #{achievementId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="achievementId" useGeneratedKeys="true">
+        insert into achievement_table(achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count,  organization_name, achievement_no, project_no, user_name, table_status,audit_flag, subject_category, technology_category)
+        values (#{achievementName}, #{achievementCategory}, #{achievementForm}, #{intellectualPropertyId}, #{achievementBelongingOrganization}, #{projectId}, #{achievementVersion}, #{achievementIntro}, #{userId}, #{uploadTime}, #{templateId}, #{remarks}, #{achievementDownloadCount}, #{organizationName}, #{achievementNo}, #{projectNo}, #{userName},true, #{auditFlag}, #{subjectCategory}, #{technologyCategory})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update achievement_table
+        <set>
+            <if test="achievementName != null and achievementName != ''">
+                achievement_name = #{achievementName},
+            </if>
+            <if test="achievementCategory != null and achievementCategory != ''">
+                achievement_category = #{achievementCategory},
+            </if>
+
+            <if test="achievementForm != null and achievementForm != ''">
+                achievement_form = #{achievementForm},
+            </if>
+            <if test="intellectualPropertyId != null">
+                intellectual_property_id = #{intellectualPropertyId},
+            </if>
+            <if test="achievementBelongingOrganization != null">
+                achievement_belonging_organization = #{achievementBelongingOrganization},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+
+            <if test="achievementVersion != null and achievementVersion != ''">
+                achievement_version = #{achievementVersion},
+            </if>
+            <if test="achievementIntro != null and achievementIntro != ''">
+                achievement_intro = #{achievementIntro},
+            </if>
+
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="uploadTime != null">
+                upload_time = #{uploadTime},
+            </if>
+            <if test="templateId != null">
+                template_id = #{templateId},
+            </if>
+
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+
+            <if test="achievementDownloadCount != null">
+                achievement_download_count = #{achievementDownloadCount},
+            </if>
+            <if test="searchCount != null">
+                search_count = #{searchCount},
+            </if>
+
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+            <if test="auditFlag != null">
+                audit_flag = #{auditFlag},
+            </if>
+            <if test="subjectCategory != null and subjectCategory != ''">
+                subject_category = #{subjectCategory},
+            </if>
+            <if test="technologyCategory != null and technologyCategory != ''">
+                technology_category = #{technologyCategory},
+            </if>
+        </set>
+        where achievement_id = #{achievementId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update achievement_table
+        <set>
+            table_status = false
+        </set>
+        where achievement_id = #{achievementId}
+    </delete>
+
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="AchievementTableMap" >
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, audit_flag, subject_category, technology_category
+        from achievement_table
+        where table_status = true
+    </select>
+
+    <!-- 统计 table_status为true 的记录数 -->
+    <select id="countAchievements" resultType="int">
+        select count(*)
+        from achievement_table
+        where table_status = true and achievement_id in (select achievement_id from approval_records where approval_status = 1 and table_status = true)
+    </select>
+
+    <!--分页查询所有行信息，已经审批过的才能查询-->
+    <select id="queryAllWithPagination" resultMap="AchievementTableMap">
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, subject_category, technology_category
+        from achievement_table
+        where table_status = true and achievement_id in (select achievement_id from approval_records where approval_status = 1 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--分页查询专利信息,已审批过的成果才能查询-->
+    <select id="queryAllWithPatent" resultMap="AchievementTableMap">
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, audit_flag, subject_category, technology_category
+        from achievement_table
+        where table_status = true and achievement_category = '专利' and achievement_id in (select achievement_id from approval_records where approval_status = 1 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--分页查询论文信息，已审批过的成果才能查询-->
+    <select id="queryAllWithPaper" resultMap="AchievementTableMap">
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, audit_flag, subject_category, technology_category
+        from achievement_table
+        where table_status = true and achievement_category = '论文' and achievement_id in (select achievement_id from approval_records where approval_status = 1 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--分页查询其他成果信息，已审批过的成果才能查询-->
+    <select id="queryAllWithOthers" resultMap="AchievementTableMap">
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, audit_flag, subject_category, technology_category
+        from achievement_table
+        where table_status = true and achievement_category = '其他成果' and achievement_id in (select achievement_id from approval_records where approval_status = 1 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--查找待审批的成果，approval_record中的approval = 0表示待审批，1表示审批通过，2表示被驳回-->
+    <select id="queryAllWithPaginationForApproval" resultMap="AchievementTableMap">
+        select
+            achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status, organization_name, achievement_no, project_no, user_name, audit_flag, subject_category, technology_category
+        from achievement_table
+        where table_status = true and achievement_id in (select achievement_id from approval_records where approval_status = 0 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--待审批搜索栏模糊搜索-->
+    <select id="queryByLikeApproval" resultMap="AchievementTableMap">
+        select * from achievement_table
+        where table_status = true and achievement_name like '%' || #{achievementName} ||'%' and achievement_id in (select achievement_id from approval_records where approval_status = 0 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--成果信息搜索栏模糊搜索，已审批-->
+    <select id="queryByLike" resultMap="AchievementTableMap">
+        select * from achievement_table
+        where table_status = true and achievement_name like '%' || #{achievementName} ||'%' and user_name like '%' || #{userName} ||'%' and achievement_id in (select achievement_id from approval_records where approval_status = 1 and table_status = true)
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--查询指定行数据并添加模糊查询-->
+    <select id="fuzzyQuery" resultMap="AchievementTableMap">
+        select
+        achievement_id, achievement_name, achievement_category, achievement_form,
+        intellectual_property_id, achievement_belonging_organization, project_id,
+        achievement_version, achievement_intro, user_id, upload_time, template_id,
+        remarks, achievement_download_count, search_count, table_status, subject_category, technology_category
+        from achievement_table
+        <where>
+            table_status = true and audit_flag != 0
+
+            <if test="searchBody.achievementCategories != null and !searchBody.achievementCategories.isEmpty()">
+                AND (
+                <foreach item="category" collection="searchBody.achievementCategories" open="" separator=" OR " close="">
+                    achievement_category = #{category}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.achievementForms != null and !searchBody.achievementForms.isEmpty()">
+                AND (
+                <foreach item="achievementForm" collection="searchBody.achievementForms" open="" separator=" OR " close="">
+                    achievement_form = #{achievementForm}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.intellectualPropertyIds != null and !searchBody.intellectualPropertyIds.isEmpty()">
+                AND (
+                <foreach item="intellectualPropertyId" collection="searchBody.intellectualPropertyIds" open="" separator=" OR " close="">
+                    intellectual_property_id = #{intellectualPropertyId}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.achievementBelongingOrganizations != null and !searchBody.achievementBelongingOrganizations.isEmpty()">
+                AND (
+                <foreach item="achievementBelongingOrganization" collection="searchBody.achievementBelongingOrganizations" open="" separator=" OR " close="">
+                    achievement_belonging_organization = #{achievementBelongingOrganization}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.projectIds != null and !searchBody.projectIds.isEmpty()">
+                AND (
+                <foreach item="projectId" collection="searchBody.projectIds" open="" separator=" OR " close="">
+                    project_id = #{projectId}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.userIds != null and !searchBody.userIds.isEmpty()">
+                AND (
+                <foreach item="userId" collection="searchBody.userIds" open="" separator=" OR " close="">
+                    user_id = #{userId}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.templateIds != null and !searchBody.templateIds.isEmpty()">
+                AND (
+                <foreach item="templateId" collection="searchBody.templateIds" open="" separator=" OR " close="">
+                    template_id = #{templateId}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.startTime != null">
+                and upload_time &gt;= #{searchBody.startTime}
+            </if>
+            <if test="searchBody.endTime != null">
+                and upload_time &lt;= #{searchBody.endTime}
+            </if>
+            <if test="searchBody.subjectCategorys != null and !searchBody.subjectCategorys.isEmpty()">
+                AND (
+                <foreach item="subjectCategory" collection="searchBody.subjectCategorys" open="" separator=" OR " close="">
+                    subject_category = #{subjectCategory}
+                </foreach>
+                )
+            </if>
+            <if test="searchBody.technologyCategorys != null and !searchBody.technologyCategorys.isEmpty()">
+                AND (
+                <foreach item="technologyCategory" collection="searchBody.technologyCategorys" open="" separator=" OR " close="">
+                    technology_category = #{technologyCategorys}
+                </foreach>
+                )
+            </if>
+        </where>
+        <trim prefix="and (" suffix=")" suffixOverrides="or">
+            <if test="searchBody.keywords != null and !searchBody.keywords.isEmpty()">
+                <foreach collection="searchBody.keywords" item="keyword" separator="and">
+                    achievement_name like '%' || #{keyword} || '%'
+                    or achievement_intro like '%' || #{keyword} || '%'
+                    or remarks like '%' || #{keyword} || '%'
+                </foreach>
+            </if>
+        </trim>
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AchievementTableMap">
+        select
+        achievement_id, achievement_name, achievement_category, achievement_form, intellectual_property_id, achievement_belonging_organization, project_id, achievement_version, achievement_intro, user_id, upload_time, template_id, remarks, achievement_download_count, search_count, table_status,audit_flag
+        from achievement_table
+        <where>
+            <if test="achievementId != null">
+                and achievement_id = #{achievementId}
+            </if>
+            <if test="achievementName != null and achievementName != ''">
+                and achievement_name = #{achievementName}
+            </if>
+            <if test="achievementCategory != null and achievementCategory != ''">
+                and achievement_category = #{achievementCategory}
+            </if>
+            <if test="achievementForm != null and achievementForm != ''">
+                and achievement_form = #{achievementForm}
+            </if>
+            <if test="intellectualPropertyId != null">
+                and intellectual_property_id = #{intellectualPropertyId}
+            </if>
+            <if test="achievementBelongingOrganization != null">
+                and achievement_belonging_organization = #{achievementBelongingOrganization}
+            </if>
+            <if test="projectId != null">
+                and project_id = #{projectId}
+            </if>
+            <if test="achievementVersion != null and achievementVersion != ''">
+                and achievement_version = #{achievementVersion}
+            </if>
+            <if test="achievementIntro != null and achievementIntro != ''">
+                and achievement_intro = #{achievementIntro}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="uploadTime != null">
+                and upload_time = #{uploadTime}
+            </if>
+            <if test="templateId != null">
+                and template_id = #{templateId}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="achievementDownloadCount != null">
+                and achievement_download_count = #{achievementDownloadCount}
+            </if>
+            <if test="searchCount != null">
+                and search_count = #{searchCount}
+            </if>
+            <if test="searchCount != null">
+                and audit_flag = #{auditFlag}
+            </if>
+            <if test="subjectCategory != null and subjectCategory != ''">
+                and subject_category = #{subjectCategory},
+            </if>
+            <if test="technologyCategory != null and technologyCategory != ''">
+                and technology_category = #{technologyCategory},
+            </if>
+
+            and table_status = true
+
+        </where>
+    </select>
+
+    <update id="restoreById">
+        update achievement_table
+        <set>
+            table_status = true
+        </set>
+        where achievement_id = #{achievement_id} and table_status = false
+    </update>
+
+    <update id="restoreAll">
+        update achievement_table
+        <set>
+            table_status = true
+        </set>
+        where table_status = false
+    </update>
+
+
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.SearchRecordsMapper">
+
+    <resultMap type="com.example.demo.model.SearchRecords" id="SearchRecordsMap">
+        <result property="searchId" column="search_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="searchContent" column="search_content" jdbcType="VARCHAR"/>
+        <result property="searchTime" column="search_time" jdbcType="TIMESTAMP"/>
+        <result property="searchMethod" column="search_method" jdbcType="INTEGER"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SearchRecordsMap">
+        select
+search_id, user_id, search_content, search_time, search_method, table_status
+        from search_records
+        where search_id = #{searchId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="searchId" useGeneratedKeys="true">
+        insert into search_records(user_id, search_content, search_time, search_method, table_status)
+        values (#{userId}, #{searchContent}, #{searchTime}, #{searchMethod}, true)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update search_records
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="searchContent != null and searchContent != ''">
+                search_content = #{searchContent},
+            </if>
+            <if test="searchTime != null">
+                search_time = #{searchTime},
+            </if>
+            <if test="searchMethod != null">
+                search_method = #{searchMethod},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+        </set>
+        where search_id = #{searchId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update search_records
+        <set>
+            table_status = false
+        </set>
+        where search_id = #{searchId}
+    </delete>
+    
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="SearchRecordsMap"> 
+        select
+search_id, user_id, search_content, search_time, search_method, table_status
+        from search_records
+        where table_status = true
+    </select>
+    
+    <!--分页获取所有行信息-->
+    <select id="queryAllWithPagination" resultMap="SearchRecordsMap"> 
+        select
+search_id, user_id, search_content, search_time, search_method, table_status
+        from search_records
+        where table_status = true
+        limit #{offset}, #{limit}
+    </select>
+</mapper>

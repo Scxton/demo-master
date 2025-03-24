@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.VersionHistoryMapper">
+
+    <resultMap type="com.example.demo.model.VersionHistory" id="VersionHistoryMap">
+        <result property="versionId" column="version_id" jdbcType="INTEGER"/>
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="versionNumber" column="version_number" jdbcType="VARCHAR"/>
+        <result property="updateContent" column="update_content" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="VersionHistoryMap">
+        select
+version_id, achievement_id, version_number, update_content, update_time, user_id, table_status
+        from version_history
+        where version_id = #{versionId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="versionId" useGeneratedKeys="true">
+        insert into version_history(achievement_id, version_number, update_content, update_time, user_id, table_status)
+        values (#{achievementId}, #{versionNumber}, #{updateContent}, #{updateTime}, #{userId}, true)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update version_history
+        <set>
+            <if test="achievementId != null">
+                achievement_id = #{achievementId},
+            </if>
+            <if test="versionNumber != null and versionNumber != ''">
+                version_number = #{versionNumber},
+            </if>
+            <if test="updateContent != null and updateContent != ''">
+                update_content = #{updateContent},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+        </set>
+        where version_id = #{versionId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update version_history
+        <set>
+            table_status = false
+        </set>
+        where version_id = #{versionId}
+    </delete>
+    
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="VersionHistoryMap"> 
+        select
+version_id, achievement_id, version_number, update_content, update_time, user_id, table_status
+        from version_history
+        where table_status = true
+    </select>
+    
+    <!--分页获取所有行信息-->
+    <select id="queryAllWithPagination" resultMap="VersionHistoryMap"> 
+        select
+version_id, achievement_id, version_number, update_content, update_time, user_id, table_status
+        from version_history
+        where table_status = true
+        limit #{offset}, #{limit}
+    </select>
+    <select id="querylimitWithPagination" resultMap="VersionHistoryMap"> 
+        select
+version_id, achievement_id, version_number, update_content, update_time, user_id, table_status
+        from version_history
+        <where>
+            table_status = true
+            <if test="versionHistory.achievementId != null">
+                and achievement_id = #{versionHistory.achievementId}
+            </if>
+            <if test="versionHistory.versionNumber != null and versionHistory.versionNumber != ''">
+                and version_number = #{versionHistory.versionNumber}
+            </if>
+            <if test="versionHistory.updateContent != null and versionHistory.updateContent != ''">
+                and update_content = #{versionHistory.updateContent}
+            </if>
+            <if test="versionHistory.updateTime != null">
+                and update_time = #{versionHistory.updateTime}
+            </if>
+            <if test="versionHistory.userId != null">
+                and user_id = #{versionHistory.userId}
+            </if>
+        </where>
+        limit #{offset}, #{limit}
+    </select>
+</mapper>

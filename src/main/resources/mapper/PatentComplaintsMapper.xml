@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.PatentComplaintsMapper">
+    <resultMap type="com.example.demo.model.PatentComplaints" id="PatentComplaintsMap">
+        <id property="complaintId" column="complaint_id" jdbcType="INTEGER"/>
+        <result property="intellectualPropertyId" column="intellectual_property_id" jdbcType="INTEGER"/>
+        <result property="complaintTime" column="complaint_time" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="complaintProcess" column="processing_status" jdbcType="INTEGER"/>
+        <result property="complaintType" column="infringement_complaint_type" jdbcType="VARCHAR"/>
+        <result property="complaintIntro" column="complaint_intro" jdbcType="VARCHAR"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+
+    </resultMap>
+
+    <select id="queryByuserId" resultMap="PatentComplaintsMap">
+        select
+            *
+        from patent_complaints
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertComplaint" keyProperty="complaintId" useGeneratedKeys="true">
+        insert into patent_complaints(intellectual_property_id, complaint_time, user_id, processing_status,
+                                      infringement_complaint_type, complaint_intro,table_status)
+        values (#{intellectualPropertyId}, #{complaintTime}, #{userId}, 0, #{complaintType},
+                #{complaintIntro}, true)
+    </insert>
+
+    <!-- 更新投诉状态 -->
+    <update id="updateComplaintStatus">
+        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true
+    </update>
+
+    <!-- 更新投诉状态未”受理中“ -->
+    <!--    <update id="updateStatusToInProgress">-->
+    <!--        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true-->
+    <!--    </update>-->
+
+    <!-- 更新投诉状态未”已受理“ -->
+    <!--    <update id="updateStatusToAccepted">-->
+    <!--        UPDATE patent_complaints SET processing_status = #{complaintProcess} WHERE complaint_id = #{complaintId} and table_status = true-->
+    <!--    </update>-->
+
+    <delete id="deleteByuserId">
+        update patent_complaints
+        <set>
+            table_status = false
+        </set>
+        where user_id = #{userId} and processing_status = 1
+    </delete>
+
+    <delete id="deleteById">
+        update patent_complaints
+        <set>
+            table_status = false
+        </set>
+        where complaint_id = #{complaintId} and processing_status = 1
+    </delete>
+
+    <select id="queryAll" resultMap="PatentComplaintsMap">
+        select * from patent_complaints
+        where table_status = true
+
+    </select>
+
+    <!-- 查询投诉信息 -->
+    <select id="findById" resultMap="PatentComplaintsMap">
+        SELECT * FROM patent_complaints WHERE complaint_id = #{complaintId} and table_status = true
+    </select>
+
+</mapper>

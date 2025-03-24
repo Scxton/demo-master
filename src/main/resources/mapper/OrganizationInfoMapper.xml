@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.OrganizationInfoMapper">
+
+    <resultMap type="com.example.demo.model.OrganizationInfo" id="OrganizationInfoMap">
+        <result property="organizationId" column="organization_id" jdbcType="INTEGER"/>
+        <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
+        <result property="organizationProjectCount" column="organization_project_count" jdbcType="INTEGER"/>
+        <result property="organizationProjectTotalCount" column="organization_project_total_count" jdbcType="INTEGER"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="organizationAddress" column="organization_address" jdbcType="VARCHAR"/>
+        <result property="organizationPhone" column="organization_phone" jdbcType="VARCHAR"/>
+        <result property="contactsName" column="contacts_name" jdbcType="VARCHAR"/>
+        <result property="contactsPhone" column="contacts_phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="OrganizationInfoMap">
+        select
+organization_id, organization_name, organization_project_count, organization_project_total_count, table_status, organization_address, organization_phone, contacts_name, contacts_phone
+        from organization_info
+        where organization_id = #{organizationId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="organizationId" useGeneratedKeys="true">
+        insert into organization_info(organization_name, organization_project_count, organization_project_total_count, table_status, organization_address, organization_phone, contacts_name, contacts_phone)
+        values (#{organizationName}, #{organizationProjectCount}, #{organizationProjectTotalCount}, #{tableStatus}, #{organizationAddress}, #{organizationPhone}, #{contactsName}, #{contactsPhone})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update organization_info
+        <set>
+            <if test="organizationName != null and organizationName != ''">
+                organization_name = #{organizationName},
+            </if>
+            <if test="organizationProjectCount != null">
+                organization_project_count = #{organizationProjectCount},
+            </if>
+            <if test="organizationProjectTotalCount != null">
+                organization_project_total_count = #{organizationProjectTotalCount},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+            <if test="organizationAddress != null and organizationAddress != ''">
+                organization_address = #{organizationAddress},
+            </if>
+            <if test="organizationPhone != null and organizationPhone != ''">
+                organization_phone = #{organizationPhone},
+            </if>
+            <if test="contactsName != null and contactsName != ''">
+                contacts_name = #{contactsName},
+            </if>
+            <if test="contactsPhone != null and contactsPhone != ''">
+                contacts_phone = #{contactsPhone},
+            </if>
+        </set>
+        where organization_id = #{organizationId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update organization_info
+        <set>
+            table_status = false
+        </set>
+        where organization_id = #{organizationId}
+    </delete>
+    
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="OrganizationInfoMap">
+        select
+organization_id, organization_name, organization_project_count, organization_project_total_count, table_status, organization_address, organization_phone, contacts_name, contacts_phone
+        from organization_info
+        where table_status = true
+    </select>
+</mapper>

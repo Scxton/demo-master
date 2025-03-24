@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserRolePermissionsMapper">
+
+    <resultMap type="com.example.demo.model.UserRolePermissions" id="UserRolePermissionsMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="userStatus" column="user_status" jdbcType="INTEGER"/>
+        <result property="applicationTime" column="application_time" jdbcType="TIMESTAMP"/>
+        <result property="userIntro" column="user_intro" jdbcType="VARCHAR"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="userPwd" column="user_pwd" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserRolePermissionsMap">
+        select
+user_id, user_name, role_id, user_status, application_time, user_intro, table_status
+        from user_role_permissions
+        where user_id = #{userId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into user_role_permissions(user_name, role_id, user_status, application_time, user_intro, table_status, user_pwd)
+        values (#{userName}, #{roleId}, #{userStatus}, #{applicationTime}, #{userIntro}, #{tableStatus}, #{userPwd})
+    </insert>
+
+    <!--通过主键修改数据，roleId = 1 是管理员-->
+    <update id="update">
+        update user_role_permissions
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+            <if test="userStatus != null">
+                user_status = #{userStatus},
+            </if>
+            <if test="applicationTime != null">
+                application_time = #{applicationTime},
+            </if>
+            <if test="userIntro != null and userIntro != ''">
+                user_intro = #{userIntro},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+            <if test="userPwd != null and userPwd != ''">
+                user_pwd = #{userPwd},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update user_role_permissions
+        <set>
+            table_status = false
+        </set>
+        where user_id = #{userId}
+    </delete>
+    
+    <!--获取所有行信息-->
+    <select id="queryAll" resultMap="UserRolePermissionsMap"> 
+        select
+user_id, user_name, role_id, user_status, application_time, user_intro, table_status
+        from user_role_permissions
+        where table_status = true
+    </select>
+    
+    <!--分页获取所有行信息,不提供密码-->
+    <select id="queryAllWithPagination" resultMap="UserRolePermissionsMap"> 
+        select
+user_id, user_name, role_id, user_status, application_time, user_intro, table_status
+        from user_role_permissions
+        where table_status = true
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--验证用户名与密码-->
+    <select id="checkByUserNameAndUserPwd" resultMap="UserRolePermissionsMap">
+        select
+role_id, user_name, user_pwd
+        from user_role_permissions
+        where user_name = #{userName}  and table_status = true Limit 1
+    </select>
+
+    <!--验证用户名-->
+    <select id="findByUserName" resultMap="UserRolePermissionsMap">
+        select
+            role_id, user_name, user_pwd
+        from user_role_permissions
+        where user_name = #{userName}  and table_status = true Limit 1
+    </select>
+
+    <!--搜索栏模糊搜索-->
+    <select id="queryByLike" resultMap="UserRolePermissionsMap">
+        select
+            user_id, user_name, role_id, user_status, application_time, user_intro, table_status
+        from user_role_permissions
+        where table_status = true
+        <if test="userName != null and userName != ''">
+            and user_name like '%' || #{userName} || '%'
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+    <select id="getUserIdByUserName" resultMap="UserRolePermissionsMap">
+        select
+            user_id
+        from user_role_permissions
+        where user_name = #{userName}  and table_status = true Limit 1
+    </select>
+
+
+</mapper>

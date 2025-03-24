@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.IntellectualPropertyMapper">
+
+    <resultMap type="com.example.demo.model.IntellectualProperty" id="IntellectualPropertyMap">
+        <result property="intellectualPropertyId" column="intellectual_property_id" jdbcType="INTEGER"/>
+        <result property="intellectualPropertyType" column="intellectual_property_type" jdbcType="VARCHAR"/>
+        <result property="applicationDate" column="application_date" jdbcType="VARCHAR"/>
+        <result property="expirationDate" column="expiration_date" jdbcType="VARCHAR"/>
+        <result property="renewalStatus" column="renewal_status" jdbcType="BOOLEAN"/>
+        <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
+        <result property="achievementId" column="achievement_id" jdbcType="INTEGER"/>
+        <result property="intellectualNo" column="intellectual_no" jdbcType="VARCHAR"/>
+        <result property="intellectualName" column="intellectual_name" jdbcType="VARCHAR"/>
+        <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
+        <result property="projectNo" column="project_no" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="auditFlag" column="audit_flag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="IntellectualPropertyMap">
+        select
+            intellectual_property_id, intellectual_property_type, application_date, expiration_date, renewal_status, table_status, achievement_id, intellectual_no, intellectual_name, organization_name, project_no
+        from intellectual_property
+        where intellectual_property_id = #{intellectualPropertyId} and table_status = true
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="intellectualPropertyId" useGeneratedKeys="true">
+        insert into intellectual_property(intellectual_property_type, application_date, expiration_date, renewal_status, table_status, achievement_id, intellectual_no, intellectual_name, organization_name, project_no, user_name, audit_flag)
+        values (#{intellectualPropertyType}, #{applicationDate}, #{expirationDate}, #{renewalStatus}, #{tableStatus}, #{achievementId}, #{intellectualNo}, #{intellectualName}, #{organizationName}, #{projectNo},#{userName}, #{auditFlag})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update intellectual_property
+        <set>
+            <if test="intellectualPropertyType != null and intellectualPropertyType != ''">
+                intellectual_property_type = #{intellectualPropertyType},
+            </if>
+            <if test="applicationDate != null">
+                application_date = #{applicationDate},
+            </if>
+            <if test="expirationDate != null">
+                expiration_date = #{expirationDate},
+            </if>
+            <if test="renewalStatus != null">
+                renewal_status = #{renewalStatus},
+            </if>
+            <if test="tableStatus != null">
+                table_status = #{tableStatus},
+            </if>
+            <if test="achievementId != null">
+                achievement_id = #{achievementId},
+            </if>
+            <if test="intellectualNo != null and intellectualNo != ''">
+                intellectual_no = #{intellectualNo},
+            </if>
+            <if test="intellectualName != null and intellectualName != ''">
+                intellectual_name = #{intellectualName},
+            </if>
+            <if test="organizationName != null and organizationName != ''">
+                organization_name = #{organizationName},
+            </if>
+            <if test="projectNo != null and projectNo != ''">
+                project_no = #{projectNo},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="auditFlag != null">
+                audit_flag = #{auditFlag}
+            </if>
+        </set>
+        where intellectual_property_id = #{intellectualPropertyId}
+    </update>
+
+    <!--通过主键逻辑删除-->
+    <!--将table_status置false-->
+    <delete id="deleteById">
+        update intellectual_property
+        <set>
+            table_status = false
+        </set>
+        where intellectual_property_id = #{intellectualPropertyId}
+    </delete>
+
+    <!--获取所有行信息,已经审核过的-->
+    <select id="queryAll" resultMap="IntellectualPropertyMap">
+        select
+            intellectual_property_id, intellectual_property_type, application_date, expiration_date, renewal_status, table_status, achievement_id, intellectual_no, intellectual_name, organization_name, project_no, user_name, audit_flag
+        from intellectual_property
+        where table_status = true and audit_flag = 1
+    </select>
+
+    <!--0表示待审核产权-->
+    <select id="queryWait" resultMap="IntellectualPropertyMap">
+        select
+            intellectual_property_id, intellectual_property_type, application_date, expiration_date, renewal_status, table_status, achievement_id, intellectual_no, intellectual_name, organization_name, project_no, user_name, audit_flag
+        from intellectual_property
+        where table_status = true and audit_flag = 0
+    </select>
+
+    <!--分页获取所有行信息,审核过的-->
+    <select id="queryAllWithPagination" resultMap="IntellectualPropertyMap">
+        select
+            intellectual_property_id, intellectual_property_type, application_date, expiration_date, renewal_status, table_status, achievement_id, intellectual_no, intellectual_name, organization_name, project_no, user_name, audit_flag
+        from intellectual_property
+        where table_status = true and audit_flag = 1
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--搜索栏模糊查询-->
+    <select id="queryByLike" resultMap="IntellectualPropertyMap">
+        select * from intellectual_property
+        where table_status = true and intellectual_property_type like '%' || #{intellectualPropertyType} ||'%'
+            limit #{offset}, #{limit}
+    </select>
+
+    <!--查询续期状态，true表示未到期需要检查-->
+    <select id="findByIsExpiredFalse" resultMap="IntellectualPropertyMap">
+        select * from intellectual_property
+        where renewal_status = true and table_status = true
+    </select>
+
+    <!--更新续期状态-->
+    <update id="updateIntellectualProperty">
+        update intellectual_property
+        <set>
+            <if test="expirationDate != null">
+                expiration_date = #{expirationDate},
+            </if>
+            <if test="renewalStatus != null">
+                renewal_status = #{renewalStatus},
+            </if>
+        </set>
+        where intellectual_property_id = #{intellectualPropertyId}
+    </update>
+
+    <!-- 统计 table_status为true 的记录数 -->
+    <select id="countIntellectualProperties" resultType="int">
+        select count(*)
+        from intellectual_property
+        where table_status = true
+    </select>
+
+    <!-- 统计 table_status为true且未过期的记录数 -->
+    <select id="countActiveIntellectualProperties" resultType="int">
+        select count(*)
+        from intellectual_property
+        where table_status = true and renewal_status = true
+    </select>
+
+    <!-- 点击更多 更新续期状态 -->
+    <update id="updateRenewalStatus">
+        update intellectual_property
+        <set>
+            <if test="expirationDate != null">
+                expiration_date = #{expirationDate},
+            </if>
+            <if test="renewalStatus != null">
+                renewal_status = #{renewalStatus},
+            </if>
+        </set>
+        where intellectual_property_id = #{intellectualPropertyId}
+    </update>
+</mapper>
