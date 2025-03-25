@@ -38,7 +38,9 @@ public class DataStatisticController {
     // 获取系统当前在线用户
     @GetMapping("/onlineUser")
     public ResponseEntity<JSONResult> countOnlineUser(){
+        log.info("countOnlineUser");
         Integer res = dataStatisticService.countOnlineUser();
+        log.info("countOnlineUser:{}", res);
         if(res > 0){
             String msg = "当前系统在线：" + res + "人";
             int statusCode = HttpStatus.OK.value();
@@ -51,6 +53,7 @@ public class DataStatisticController {
     // 根据用户名获取用户的登录时间
     @GetMapping("/getLogInTimeByUsername")
     public ResponseEntity<JSONResult> getLogInTimeByUsername(String userName){
+        log.info("getLogInTimeByUsername");
         String logInTime = dataStatisticService.getLogInTimeByUsername(userName);
         String msg = "用户：" + userName + "\n" +"登录时间为：" + logInTime;
         int statusCode = HttpStatus.OK.value();
@@ -58,15 +61,16 @@ public class DataStatisticController {
         return ResponseEntity.ok(jsonResult);
     }
 
-    // 获取用户在线时长
-//    @GetMapping("/onlineUserDuration")
-//    public ResponseEntity<JSONResult> onlineUserDuration(String userName){
-//        String duration_time = dataStatisticService.onlineUserDuration(userName);
-//        String msg = "当前在线时长为：" + duration_time;
-//        int statusCode = HttpStatus.OK.value();
-//        JSONResult jsonResult = new JSONResult("success",statusCode,msg,duration_time);
-//        return ResponseEntity.ok(jsonResult);
-//    }
+//     获取用户在线时长
+    @GetMapping("/onlineUserDuration")
+    public ResponseEntity<JSONResult> onlineUserDuration(String userName){
+        log.info("onlineUserDuration");
+        String duration_time = dataStatisticService.onlineUserDuration(userName);
+        String msg = "当前在线时长为：" + duration_time;
+        int statusCode = HttpStatus.OK.value();
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,duration_time);
+        return ResponseEntity.ok(jsonResult);
+    }
 
 
 //    // 用户登出接口

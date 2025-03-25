@@ -213,10 +213,7 @@ public class AchievementTableService implements AchievementTableMapper {
      */
     @Override
     public List<AchievementTable> fuzzyQuery(SearchBody searchBody, int pageNum, int pageSize) {
-        log.info("service fuzzyQuery");
-        log.info("searchBody:{}", searchBody);
-        log.info("SubjectCategorys:{}", searchBody.getSubjectCategorys());
-        log.info("echnologyCategorys:{}", searchBody.getTechnologyCategorys());
+
         int offset = (pageNum - 1) * pageSize ;
         return this.achievementTableMapper.fuzzyQuery(searchBody, offset, pageSize);
     }

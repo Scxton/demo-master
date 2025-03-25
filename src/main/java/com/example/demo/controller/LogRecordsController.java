@@ -18,6 +18,7 @@ import javax.annotation.Resource;
  * @author makejava
  * @since 2024-12-09 14:50:56
  */
+@Slf4j
 @RestController
 @RequestMapping("logRecords")
 public class LogRecordsController {
@@ -35,6 +36,7 @@ public class LogRecordsController {
      */
     @GetMapping("/queryById")
     public ResponseEntity<JSONResult> queryById(@Param("id") Integer id) {
+
         LogRecords res = this.logRecordsService.queryById(id);
         String msg = "查询成功";
         int statusCode = HttpStatus.OK.value();
@@ -49,7 +51,10 @@ public class LogRecordsController {
      * @return 新增结果
      */
     @PostMapping("/add")
-    public ResponseEntity<JSONResult> add(LogRecords logRecords) {
+    public ResponseEntity<JSONResult> add(@RequestBody LogRecords logRecords) {
+        log.info("add LogRecords");
+        log.info("logRecords: {}", logRecords.getUserId());
+        log.info("logRecords: "+logRecords.getLogIntro());
         Integer res = this.logRecordsService.insert(logRecords);
         String msg = "数据插入成功";
         int statusCode = HttpStatus.OK.value();
@@ -64,7 +69,8 @@ public class LogRecordsController {
      * @return 编辑结果
      */
     @PutMapping("/edit")
-    public ResponseEntity<JSONResult> edit(LogRecords logRecords) {
+    public ResponseEntity<JSONResult> edit(@RequestBody LogRecords logRecords) {
+        log.info("edit LogRecords");
         int res = this.logRecordsService.update(logRecords);
         String msg = "数据编辑成功";
         int statusCode = HttpStatus.OK.value();
@@ -80,6 +86,7 @@ public class LogRecordsController {
      */
     @GetMapping("/delete")
     public ResponseEntity<JSONResult> deleteById(@Param("id") Integer id) {
+        log.info("delete LogRecords");
         Integer res = this.logRecordsService.deleteById(id);
         String msg = "数据删除成功";
         int statusCode = HttpStatus.OK.value();

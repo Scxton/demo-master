@@ -70,6 +70,7 @@ public class AchievementTableController {
     @PostMapping("/edit")
     @PreAuthorize("hasAuthority('ROLE_1')")
     public ResponseEntity<JSONResult> edit(@RequestBody AchievementTable achievementTable) {
+        log.info("edit achievementTable");
         Integer res = this.achievementTableService.update(achievementTable);
         String msg = "数据编辑成功";
         int statusCode = HttpStatus.OK.value();
@@ -261,9 +262,10 @@ public class AchievementTableController {
             @RequestBody SearchBody searchBody
     ){
         log.info("fuzzyQuery");
-        log.info("keywords:{}", searchBody.getKeywords());
-        log.info("subject:{}", searchBody.getSubjectCategorys());
-        log.info("technology:{}",searchBody.getTechnologyCategorys());
+//        log.info("keywords:{}", searchBody.getKeywords());
+//        log.info("subject:{}", searchBody.getSubjectCategorys());
+//        log.info("technology:{}",searchBody.getTechnologyCategorys());
+        log.info("searchBody:{}",searchBody.getAchievementBelongingOrganizations());
         Integer pageNum = searchBody.getPageNum();
         Integer pageSize = searchBody.getPageSize();
         if(pageNum == null){

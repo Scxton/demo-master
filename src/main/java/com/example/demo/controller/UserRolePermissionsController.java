@@ -54,6 +54,9 @@ public class UserRolePermissionsController {
      *
      * @param userRolePermissions 实体
      * @return 新增结果
+     * 1:管理员
+     * 2：发布者
+     * 3：普通用户
      */
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_1')")

@@ -40,7 +40,7 @@ public class DataStatisticService {
         // 将 Date 转换为 yyyy-MM-dd HH:mm:ss 格式的字符串
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedLogInTime = sdf.format(logIn_Time);
-        log.info("1111111111");
+
         return this.dataStatisticMapper.userLoginInsert(userId, userName, formattedLogInTime, formattedLogInTime, null);
     }
 
@@ -63,11 +63,11 @@ public class DataStatisticService {
 
         // 将 Date 转换为 yyyy-MM-dd HH:mm:ss 格式的字符串
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        log.info("1111111111");
+
         String formattedLogOutTime = sdf.format(logOut_Time);
-        log.info("formattedLogOutTime " + formattedLogOutTime);
+
         String onlineDuration = onlineUserDuration(userName);
-        log.info("onlineDuration " + onlineDuration);
+
         return this.dataStatisticMapper.updateLogOutInfo(userName, formattedLogOutTime, onlineDuration);
     }
 

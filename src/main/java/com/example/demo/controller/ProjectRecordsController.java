@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 import com.example.demo.service.ProjectRecordsService;
 import com.example.demo.utils.JSONResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import com.example.demo.model.ProjectRecords;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author makejava
  * @since 2025-03-21 13:43:54
  */
+@Slf4j
 @RestController
 @RequestMapping("projectRecords")
 public class ProjectRecordsController {
@@ -48,6 +50,7 @@ public class ProjectRecordsController {
      */
     @PostMapping("/add")
     public ResponseEntity<JSONResult> add(@RequestBody ProjectRecords projectRecords) {
+        log.info("add projectRecords");
         Integer res = this.projectRecordsService.insert(projectRecords);
         String msg = "数据插入成功";
         int statusCode = HttpStatus.OK.value();
