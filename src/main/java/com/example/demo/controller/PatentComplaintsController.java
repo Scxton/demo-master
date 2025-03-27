@@ -1,16 +1,25 @@
 package com.example.demo.controller;
-import com.example.demo.model.IntellectualProperty;
+
 import com.example.demo.model.PatentComplaints;
-import com.example.demo.service.IntellectualPropertyService;
 import com.example.demo.service.PatentComplaintsService;
+import com.example.demo.utils.FileTools;
+import com.example.demo.utils.FileZip;
 import com.example.demo.utils.JSONResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+/*加上传下载 */
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -135,5 +144,68 @@ public class PatentComplaintsController {
         int statusCode = HttpStatus.OK.value();
         JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
         return ResponseEntity.ok(jsonResult);
+    }
+    /*
+     * 上传投诉信息(包括文件)
+     */
+    @PostMapping("/upload")
+    public JSONResult uploadtoAudit(
+            @RequestParam("file") List<MultipartFile> files,
+            @RequestPart(value = "patentComplaints") PatentComplaints patentComplaints
+    ){
+        String basePath = "C:/patentComplaints/";
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+        String fileName = now.format(formatter) + ".zip";
+        patentComplaints.setFileName(fileName);
+        JSONResult jsonResult = new JSONResult();
+        int statusCode = HttpStatus.OK.value();
+        jsonResult.setResultCode(statusCode);
+        Integer res = this.patentComplaintsService.insertComplaint(patentComplaints);
+        if(res == 0){
+            jsonResult = new JSONResult("fail", statusCode, "上传失败", "上传失败");
+            return jsonResult;
+        }
+        String msg = "信息投诉成功";
+
+        String filePath = basePath + now.format(formatter);
+
+        MultipartFile file = null;
+
+        for (int i = 0; i < files.size(); ++i) {
+            file = files.get(i);
+            jsonResult = FileTools.upload(file, filePath, i+1);
+            if(jsonResult.getType() == "fail"){
+                return jsonResult;
+            }
+        }
+        String zipFilePath = basePath+fileName;
+
+        File inputFile = new File(filePath);
+        File outputFile = new File(zipFilePath);
+        try {
+            FileZip.zipCompress(inputFile, outputFile);
+            FileTools.forceDelete(inputFile);
+            jsonResult = new JSONResult("success", statusCode, msg, res);
+            return jsonResult;
+        } catch (IOException e) {
+            jsonResult = new JSONResult("fail", statusCode, "上传失败", e.getMessage());
+            e.printStackTrace();
+            return jsonResult;
+        }
+    }
+    /*
+     * 下载投诉信息文件
+     */
+    @PostMapping("/download")
+    public void downloadtoAudit(HttpServletResponse response,
+                                @RequestParam("fileName") String fileName){
+        String basePath = "C:/patentComplaints/";
+        try {
+            FileTools.downloadfile(response, basePath, fileName);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.DownloadRecords;
 import com.example.demo.service.DownloadRecordsService;
 import com.example.demo.utils.JSONResult;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,8 @@ public class DownloadRecordsController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("{id}")
-    public ResponseEntity<JSONResult> queryById(@PathVariable("id") Integer id) {
+    @GetMapping("/id")
+    public ResponseEntity<JSONResult> queryById(@Param("id") Integer id) {
         DownloadRecords res = this.downloadRecordsService.queryById(id);
         String msg = "查询成功";
         int statusCode = HttpStatus.OK.value();
@@ -77,8 +78,8 @@ public class DownloadRecordsController {
      * @param id 主键
      * @return 删除是否成功
      */
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<JSONResult> deleteById(@PathVariable("id")Integer id) {
+    @DeleteMapping("/delete/id")
+    public ResponseEntity<JSONResult> deleteById(@Param("id")Integer id) {
         Integer res = this.downloadRecordsService.deleteById(id);
         String msg = "数据删除成功";
         int statusCode = HttpStatus.OK.value();

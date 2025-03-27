@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 /**
@@ -26,7 +28,7 @@ public class LogRecordsService implements LogRecordsMapper {
      * 通过ID查询单条数据
      *
      * @param logId 主键
-     * @return 
+     * @return
      */
     @Override
     public LogRecords queryById(Integer logId) {
@@ -37,7 +39,7 @@ public class LogRecordsService implements LogRecordsMapper {
      * 新增数据
      *
      * @param logRecords 实例对象
-     * @return 
+     * @return
      */
     @Override
     public Integer insert(LogRecords logRecords) {
@@ -48,7 +50,7 @@ public class LogRecordsService implements LogRecordsMapper {
      * 修改数据
      *
      * @param logRecords 实例对象
-     * @return 
+     * @return
      */
     @Override
     public Integer update(LogRecords logRecords) {
@@ -66,5 +68,27 @@ public class LogRecordsService implements LogRecordsMapper {
     public Integer deleteById(Integer logId) {
         Integer res = this.logRecordsMapper.deleteById(logId);
         return res;
+    }
+    /**
+     * 查询所有行数据
+     *
+     * @return 表中所有行数据
+     *
+     */
+    @Override
+    public List<LogRecords> queryAll(){
+        return this.logRecordsMapper.queryAll();
+    }
+
+    /**
+     * 分页查询所有行数据
+     *
+     * @return 表中所有行数据
+     *
+     */
+    @Override
+    public List<LogRecords> queryAllWithPagination(int pageNum, int pageSize){
+        int offset = (pageNum - 1) * pageSize ;
+        return this.logRecordsMapper.queryAllWithPagination(offset,pageSize);
     }
 }

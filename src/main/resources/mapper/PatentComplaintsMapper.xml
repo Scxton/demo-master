@@ -10,7 +10,7 @@
         <result property="complaintType" column="infringement_complaint_type" jdbcType="VARCHAR"/>
         <result property="complaintIntro" column="complaint_intro" jdbcType="VARCHAR"/>
         <result property="tableStatus" column="table_status" jdbcType="BOOLEAN"/>
-
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryByuserId" resultMap="PatentComplaintsMap">
@@ -22,9 +22,9 @@
 
     <insert id="insertComplaint" keyProperty="complaintId" useGeneratedKeys="true">
         insert into patent_complaints(intellectual_property_id, complaint_time, user_id, processing_status,
-                                      infringement_complaint_type, complaint_intro,table_status)
+                                      infringement_complaint_type, complaint_intro,table_status, file_name)
         values (#{intellectualPropertyId}, #{complaintTime}, #{userId}, 0, #{complaintType},
-                #{complaintIntro}, true)
+                #{complaintIntro}, true, #{fileName})
     </insert>
 
     <!-- 更新投诉状态 -->

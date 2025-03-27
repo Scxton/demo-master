@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import javax.annotation.Resource;
 
 /**
@@ -86,9 +89,40 @@ public class LogRecordsController {
      */
     @GetMapping("/delete")
     public ResponseEntity<JSONResult> deleteById(@Param("id") Integer id) {
-        log.info("delete LogRecords");
+
+        log.info("delete LogRecords id {}",id );
         Integer res = this.logRecordsService.deleteById(id);
         String msg = "数据删除成功";
+        int statusCode = HttpStatus.OK.value();
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
+        return ResponseEntity.ok(jsonResult);
+    }
+    /**
+     *
+     * 查询所有行数据
+     * @return 所有行数据
+     */
+    @GetMapping("/queryAll")
+    public ResponseEntity<JSONResult> queryAll() {
+        List<LogRecords> res = this.logRecordsService.queryAll();
+        String msg = "查询所有行成功";
+        int statusCode = HttpStatus.OK.value();
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
+        return ResponseEntity.ok(jsonResult);
+    }
+
+    /**
+     *
+     * 分页查询所有行数据
+     * @param pageNum 页数
+     * @param pageSize 页大小
+     * @return 所有行数据
+     */
+    @GetMapping("/queryAllWithPagination")
+    public ResponseEntity<JSONResult> queryAllWithPagination(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        List<LogRecords> res = this.logRecordsService.queryAllWithPagination(pageNum, pageSize);
+        String msg = "分页查询所有行成功";
         int statusCode = HttpStatus.OK.value();
         JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
         return ResponseEntity.ok(jsonResult);

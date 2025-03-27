@@ -1,10 +1,12 @@
 package com.example.demo.mapper;
 
+
 import com.example.demo.model.LogRecords;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+
 
 /**
  * (LogRecords)表数据库访问层
@@ -45,6 +47,21 @@ public interface LogRecordsMapper {
      * @return 影响行数
      */
     Integer deleteById(Integer logId);
+    /**
+     *查询所有行数据
+     *
+     *return 表中所有行数据
+     *
+     */
+    List<LogRecords> queryAll();
+
+    /**
+     *分页查询所有行数据
+     *
+     *return 页中所有行数据
+     *
+     */
+    List<LogRecords> queryAllWithPagination (@Param("offset") int offset , @Param("limit") int limit);
 
 }
 

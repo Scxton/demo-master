@@ -17,7 +17,7 @@ public class PatentComplaints {
     private String complaintType;
     private String  complaintIntro;
     private Boolean tableStatus;;
-
+    private String fileName;
 //    public enum complaintProcessStatus{
 //        NOT_ACCEPTED("未受理"),
 //        IN_PROGRESS("受理中"),
@@ -69,6 +69,14 @@ public class PatentComplaints {
 //        }
 //    }
 
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public Integer getComplaintId() {
         return complaintId;
