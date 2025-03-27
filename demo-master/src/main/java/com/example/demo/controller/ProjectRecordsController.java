@@ -115,6 +115,34 @@ public class ProjectRecordsController {
         JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
         return ResponseEntity.ok(jsonResult);
     }
-    
-    
+
+    /**
+     *
+     * 根据机构id查询项目数量
+     * @param organizationId 机构id
+     * @return 项目数量
+     */
+    @GetMapping("/countProjectsByOrganizationId")
+    public ResponseEntity<JSONResult> countProjectsByOrganizationId(@RequestParam(value = "organizationId") Integer organizationId) {
+        Integer res = this.projectRecordsService.countProjectsByOrganizationId(organizationId);
+        String msg = "查询成功";
+        int statusCode = HttpStatus.OK.value();
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
+        return ResponseEntity.ok(jsonResult);
+    }
+
+    /**
+     *
+     * 根据机构id查询成果数量
+     * @param organizationId 机构id
+     * @return 成果数量
+     */
+    @GetMapping("/countAchievementsByOrganizationId")
+    public ResponseEntity<JSONResult> countAchievementsByOrganizationId(@RequestParam(value = "organizationId") Integer organizationId) {
+        Integer res = this.projectRecordsService.countAchievementsByOrganizationId(organizationId);
+        String msg = "查询成功";
+        int statusCode = HttpStatus.OK.value();
+        JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
+        return ResponseEntity.ok(jsonResult);
+    }
 }

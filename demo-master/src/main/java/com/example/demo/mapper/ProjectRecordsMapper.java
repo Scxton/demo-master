@@ -60,5 +60,21 @@ public interface ProjectRecordsMapper {
      *
      */
      List<ProjectRecords> queryAllWithPagination (@Param("offset") int offset , @Param("limit") int limit);
+
+     /**
+      *查询某单位总项目数
+      *
+      *return 总记录数
+      *
+      */
+     Integer countProjectsByOrganizationId(Integer organizationId);
+
+     /**
+      *分页查询某单位成果
+      *
+      *return 页中所有行数据
+      *
+      */
+     Integer countAchievementsByOrganizationId(Integer achievementId);
 }
 

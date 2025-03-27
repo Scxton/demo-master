@@ -74,4 +74,18 @@ project_id, achievement_id, project_name, organization_id, project_intro, table_
         where table_status = true
         limit #{offset}, #{limit}
     </select>
+
+    <!--统计单位项目数量 -->
+    <select id="countProjectsByOrganizationId" resultType="java.lang.Integer">
+        select count(*)
+        from project_records
+        where table_status = true and organization_id = #{organizationId}
+    </select>
+
+    <!--统计单位成果数量-->
+    <select id="countAchievementsByOrganizationId" resultType="java.lang.Integer">
+        select count(*)
+        from achievement_table
+        where table_status = true and achievement_belonging_organization = #{organizationId}
+    </select>
 </mapper>

@@ -87,4 +87,26 @@ public class ProjectRecordsService implements ProjectRecordsMapper {
         return this.projectRecordsMapper.queryAllWithPagination(offset,pageSize);
         
      }
+
+     /**
+     * 根据机构ID查询项目数
+     *
+     * @return 项目数
+     *
+     */
+     @Override
+     public Integer countProjectsByOrganizationId(Integer organizationId){
+         return this.projectRecordsMapper.countProjectsByOrganizationId(organizationId);
+     }
+
+     /**
+     * 根据OrganizationId查询项目数
+     *
+     * @return 项目数
+     *
+     */
+     @Override
+     public Integer countAchievementsByOrganizationId(Integer achievementId){
+         return this.projectRecordsMapper.countAchievementsByOrganizationId(achievementId);
+     }
 }
