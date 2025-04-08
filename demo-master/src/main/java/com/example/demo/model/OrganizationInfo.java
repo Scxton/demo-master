@@ -20,7 +20,7 @@ public class OrganizationInfo implements Serializable {
     private Integer organizationProjectTotalCount;
 
     private Boolean tableStatus;
-
+    // 单位地址  单位电话  联系人 联系人电话
     private String organizationAddress;
     private String organizationPhone;
     private String contactsName;
