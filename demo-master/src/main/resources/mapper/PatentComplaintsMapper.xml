@@ -14,8 +14,7 @@
     </resultMap>
 
     <select id="queryByuserId" resultMap="PatentComplaintsMap">
-        select
-            *
+        select *
         from patent_complaints
         where user_id = #{userId}
     </select>

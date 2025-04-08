@@ -23,11 +23,11 @@ public class PatentComplaintsService {
 
 //    private ComplaintProcessStatus complaintProcessStatus;
 
-    public PatentComplaints findById(Integer complaintId){
+    public List<PatentComplaints> findById(Integer complaintId) {
         return this.patentComplaintsMapper.findById(complaintId);
     }
 
-    public PatentComplaints queryByuserId(Integer userId){
+    public List<PatentComplaints> queryByuserId(Integer userId) {
         return this.patentComplaintsMapper.queryByuserId(userId);
     }
 

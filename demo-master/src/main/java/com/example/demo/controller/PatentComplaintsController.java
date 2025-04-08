@@ -24,7 +24,7 @@ public class PatentComplaintsController {
     // 通过投诉信息id查询投诉信息
     @GetMapping("/findById")
     public ResponseEntity<JSONResult> findById(@Param("userId") Integer complaintId) {
-        PatentComplaints res = this.patentComplaintsService.queryByuserId(complaintId);
+        List<PatentComplaints> res = this.patentComplaintsService.queryByuserId(complaintId);
         String msg = "投诉信息查询成功";
         int statusCode = HttpStatus.OK.value();
         JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
@@ -35,7 +35,7 @@ public class PatentComplaintsController {
     // 通过用户id查询投诉信息
     @GetMapping("/queryByuserId")
     public ResponseEntity<JSONResult> queryById(@Param("userId") Integer userId) {
-        PatentComplaints res = this.patentComplaintsService.queryByuserId(userId);
+        List<PatentComplaints> res = this.patentComplaintsService.queryByuserId(userId);
         String msg = "用户投诉查询成功";
         int statusCode = HttpStatus.OK.value();
         JSONResult jsonResult = new JSONResult("success",statusCode,msg,res);
@@ -71,9 +71,9 @@ public class PatentComplaintsController {
     @GetMapping("/complaintId")
     public ResponseEntity<JSONResult> updateStatusToInProgress(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
 
-        PatentComplaints complaint = this.patentComplaintsService.findById(complaintId);
-        log.info("complaint:{}",complaint.getComplaintId());
-        log.info("complaint:{}",complaint.getComplaintIntro());
+        List<PatentComplaints> complaint = this.patentComplaintsService.findById(complaintId);
+//        log.info("complaint:{}",complaint.getComplaintId());
+//        log.info("complaint:{}",complaint.getComplaintIntro());
         log.info("status before :{}",status);
 
         if( status == 0 && complaint != null ){
@@ -82,7 +82,7 @@ public class PatentComplaintsController {
             int statusCode = HttpStatus.OK.value();
             log.info("status now:{}",statusCode);
             JSONResult jsonResult = new JSONResult("success",statusCode,msg, status);
-            log.info("complaint now :{}",complaint.getComplaintProcess());
+//            log.info("complaint now :{}",complaint.getComplaintProcess());
             return ResponseEntity.ok(jsonResult);
         }
 
@@ -92,7 +92,7 @@ public class PatentComplaintsController {
     //审核投诉，修改状态为 "已受理"
     @PostMapping("/accept/complaintId")
     public ResponseEntity<JSONResult> updateStatusToAccepted(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
-        PatentComplaints complaint = this.patentComplaintsService.findById(complaintId);
+        List<PatentComplaints> complaint = this.patentComplaintsService.findById(complaintId);
         //PatentComplaints.ComplaintProcessStatus status = complaint.getComplaintProcess();
         if( status == 1 && complaint != null ){
 //            this.patentComplaintsService.updateComplaintStatus(complaintId, status);

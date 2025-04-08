@@ -10,10 +10,10 @@ import com.example.demo.model.PatentComplaints;
 public interface PatentComplaintsMapper {
 
     //通过投诉id查询投诉信息
-    PatentComplaints findById(Integer complaintId);
+    List<PatentComplaints> findById(Integer complaintId);
 
     //通过用户id查询投诉信息
-    PatentComplaints queryByuserId(Integer userId);
+    List<PatentComplaints> queryByuserId(Integer userId);
 
     Integer insertComplaint(PatentComplaints patentComplaints);
 
