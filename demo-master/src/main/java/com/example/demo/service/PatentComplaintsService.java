@@ -35,8 +35,12 @@ public class PatentComplaintsService {
         return this.patentComplaintsMapper.insertComplaint(patentComplaints);
     }
 
-    public Integer updateComplaint(PatentComplaints patentComplaints){
-        return this.patentComplaintsMapper.updateComplaint(patentComplaints);
+//    public Integer updateComplaint(PatentComplaints patentComplaints){
+//        return this.patentComplaintsMapper.updateComplaint(patentComplaints);
+//    }
+
+    public Integer updateComplaintStatus(Integer complaintId, Integer complaintProcess) {
+        return this.patentComplaintsMapper.updateComplaintStatus(complaintId, complaintProcess);
     }
 
     public Integer deleteByuserId(Integer userId){

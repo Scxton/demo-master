@@ -67,8 +67,8 @@ public class PatentComplaintsController {
 //    }
 
 
-    //查询投诉详情，并将状态修改为 "受理中"
-    @GetMapping("/complaintId")
+    //查询投诉详情，并将状态修改为 "已受理完成"，即数据库中只存储0和2
+    @PostMapping("/complaintId")
     public ResponseEntity<JSONResult> updateStatusToInProgress(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
 
         List<PatentComplaints> complaint = this.patentComplaintsService.findById(complaintId);
@@ -76,9 +76,9 @@ public class PatentComplaintsController {
 //        log.info("complaint:{}",complaint.getComplaintIntro());
         log.info("status before :{}",status);
 
-        if( status == 0 && complaint != null ){
-//            this.patentComplaintsService.updateComplaintStatus(complaintId, 1);
-            String msg = "投诉信息受理中...";
+        if (status == 1 && complaint != null) {
+            this.patentComplaintsService.updateComplaintStatus(complaintId, 2);
+            String msg = "投诉信息已被受理...";
             int statusCode = HttpStatus.OK.value();
             log.info("status now:{}",statusCode);
             JSONResult jsonResult = new JSONResult("success",statusCode,msg, status);
@@ -90,19 +90,19 @@ public class PatentComplaintsController {
     }
 
     //审核投诉，修改状态为 "已受理"
-    @PostMapping("/accept/complaintId")
-    public ResponseEntity<JSONResult> updateStatusToAccepted(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
-        List<PatentComplaints> complaint = this.patentComplaintsService.findById(complaintId);
-        //PatentComplaints.ComplaintProcessStatus status = complaint.getComplaintProcess();
-        if( status == 1 && complaint != null ){
-//            this.patentComplaintsService.updateComplaintStatus(complaintId, status);
-            String msg = "投诉处理成功，已受理...";
-            int statusCode = HttpStatus.OK.value();
-            JSONResult jsonResult = new JSONResult("success",statusCode,msg, 1);
-            return ResponseEntity.ok(jsonResult);
-        }
-        return ResponseEntity.ok(JSONResult.error(1002, "状态更新失败，可能已被处理！"));
-    }
+//    @PostMapping("/accept/complaintId")
+//    public ResponseEntity<JSONResult> updateStatusToAccepted(@Param("complaintId") Integer complaintId, @Param("status") Integer status) {
+//        List<PatentComplaints> complaint = this.patentComplaintsService.findById(complaintId);
+//        //PatentComplaints.ComplaintProcessStatus status = complaint.getComplaintProcess();
+//        if( status == 1 && complaint != null ){
+//            this.patentComplaintsService.updateComplaintStatus(complaintId, 2);
+//            String msg = "投诉处理成功，已受理...";
+//            int statusCode = HttpStatus.OK.value();
+//            JSONResult jsonResult = new JSONResult("success",statusCode,msg, status);
+//            return ResponseEntity.ok(jsonResult);
+//        }
+//        return ResponseEntity.ok(JSONResult.error(1002, "状态更新失败，可能已被处理！"));
+//    }
 
     // 通过投诉信息id删除投诉信息
     @GetMapping("/deleteById")

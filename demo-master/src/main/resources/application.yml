@@ -14,13 +14,13 @@ spring:
   #    check-template-location: false
   #    check-template: false
   datasource:
-    url: jdbc:kingbase://192.168.165.117:54321/DB1
+    url: jdbc:kingbase://192.168.8.29:54321/DB1
     #    url: jdbc:kingbase://192.168.1.25:54321/DB1
     #    url: jdbc:kingbase://192.168.16.117:54321/DB1
     #    username: SYSTEM
     #    password: SYSTEM
     username: SYSTEM
-    password: SYSTEM
+    password: system
     driver-class-name: com.kingbase.Driver
 mybatis:
   mapper-locations: classpath:**/mapper/*.xml
